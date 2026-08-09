@@ -264,6 +264,23 @@ BEGIN
 END;
 $$;
 
+-- E. Purge Old Scan Logs
+-- Automatically purges logs older than 30 days to enforce data-retention privacy.
+CREATE OR REPLACE FUNCTION public.purge_old_scan_logs()
+RETURNS integer
+SECURITY DEFINER
+SET search_path = public
+LANGUAGE plpgsql AS $$
+DECLARE
+  deleted_count integer;
+BEGIN
+  DELETE FROM scan_logs
+  WHERE scanned_at < NOW() - INTERVAL '30 days';
+  GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  RETURN deleted_count;
+END;
+$$;
+
 -- --------------------------------------------
 -- 7. Grant execution permissions
 -- --------------------------------------------
@@ -272,3 +289,6 @@ GRANT EXECUTE ON FUNCTION public.get_public_contacts(text) TO anon, authenticate
 GRANT EXECUTE ON FUNCTION public.log_card_scan(text) TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.delete_user_account() TO authenticated;
 REVOKE EXECUTE ON FUNCTION public.delete_user_account() FROM anon, public;
+GRANT EXECUTE ON FUNCTION public.purge_old_scan_logs() TO authenticated;
+REVOKE EXECUTE ON FUNCTION public.purge_old_scan_logs() FROM anon, public;
+

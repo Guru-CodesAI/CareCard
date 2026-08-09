@@ -304,7 +304,7 @@ export function ScanPage() {
 
                     <button
                       onClick={() => handleContact(currentContact)}
-                      className="btn-primary w-full"
+                      className="btn-primary w-full mb-2"
                       id="scan-call-button"
                     >
                       {currentContact.contact_method === 'phone' ? (
@@ -313,6 +313,9 @@ export function ScanPage() {
                         <><Mail className="w-4 h-4" /> {t.sendEmail}</>
                       )}
                     </button>
+                    <p className="text-[10px] text-warmgray-400 text-center">
+                      Note: This will launch your device's native dialer or mail application.
+                    </p>
                   </div>
                 )}
 

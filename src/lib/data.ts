@@ -98,8 +98,11 @@ export async function updateCard(
   updates: Partial<CareCard>,
   caregiverId: string
 ): Promise<CareCard | null> {
+  // Strip security-sensitive fields from generic updates to prevent parameter pollution
+  const { id: _id, public_token, caregiver_id, status, created_at, ...allowedUpdates } = updates
+
   // Sanitize string fields
-  const sanitized: Partial<CareCard> = { ...updates }
+  const sanitized: Partial<CareCard> = { ...allowedUpdates }
   if (sanitized.display_name) sanitized.display_name = sanitizeInput(sanitized.display_name, 100)
   if (sanitized.accessibility_info) sanitized.accessibility_info = sanitizeInput(sanitized.accessibility_info, 500)
   if (sanitized.custom_instructions) sanitized.custom_instructions = sanitizeInput(sanitized.custom_instructions, 500)
@@ -120,6 +123,7 @@ export async function updateCard(
   if (error) throw new Error(error.message)
   return data
 }
+
 
 export async function deactivateCard(id: string, caregiverId: string): Promise<boolean> {
   if (!useSupabase()) {
