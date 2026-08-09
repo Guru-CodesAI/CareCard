@@ -17,7 +17,6 @@ interface PublicContact {
   contact_name: string
   relationship: string
   contact_method: 'phone' | 'email'
-  contact_value: string
   is_primary: boolean
 }
 
@@ -437,7 +436,7 @@ export function ScanPage() {
                 {relayContact.contact_name} ({relayContact.relationship})
               </div>
               <div className="text-xs text-warmgray-500 mt-1 font-mono">
-                Masked ID: {relayContact.contact_value}
+                Relay Session: {token?.substring(0, 8).toUpperCase() || 'UNKNOWN'}
               </div>
             </div>
 

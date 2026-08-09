@@ -171,7 +171,7 @@ CONTACT TRUSTED PERSON → OPTIONAL LANGUAGE HELP → FAMILY RECONNECTS
 
 ### Privacy Controls
 - Each field has an individual public/private toggle
-- Private data (phone numbers, addresses) never returned to public endpoints
+- Private data (raw contact values, phone numbers, emails, addresses) is never returned or exposed to public endpoints or browser network logs
 - Privacy-by-default: most sensitive fields start as hidden
 
 ### Input Security
@@ -201,8 +201,8 @@ CONTACT TRUSTED PERSON → OPTIONAL LANGUAGE HELP → FAMILY RECONNECTS
 ## ⚠️ Known Limitations
 
 1. **Offline:** QR scan requires internet. Physical card can include minimal printed info.
-2. **Contact privacy:** In the current MVP, trusted contact info is accessible via the public scan page to enable the "Call Now" feature. In production, this should route through an Edge Function.
-3. **Demo mode:** Without Supabase configured, data is stored in memory and lost on page refresh.
+2. **Contact privacy:** Contact destinations are fully hidden. The public RPC does not return contact values; instead, the frontend simulates a secure server-side relay proxy call and proxy email redirect.
+3. **Demo mode:** To prevent accidental open deployment, demo mode requires an explicit VITE_DEMO_MODE=true environment variable when Supabase keys are absent.
 4. **No MFA:** Optional MFA is architecturally planned but not implemented in the MVP.
 5. **No server-side rate limiting:** Current rate limiting is client-side only. Production needs Supabase Edge Function rate limiting.
 
@@ -255,7 +255,7 @@ npm run dev
 
 > **⚠️ Never put `SUPABASE_SERVICE_ROLE_KEY` in frontend code.**
 
-Without environment variables, the app runs in **Demo Mode** with in-memory storage.
+Without environment variables, the app will fail-closed in production unless VITE_DEMO_MODE=true is explicitly set in development.
 
 ---
 

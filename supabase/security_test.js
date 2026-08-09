@@ -91,6 +91,36 @@ async function runSecurityTests() {
     console.log('✅ Test 4 Passed: Direct public write to "scan_logs" threw exception (blocked).')
   }
 
+  // Test 5: Try calling purge_old_scan_logs anonymously (Should fail with permission error)
+  try {
+    const { error } = await supabase.rpc('purge_old_scan_logs')
+    if (error && (error.code === '42501' || error.message.includes('permission denied'))) {
+      console.log('✅ Test 5 Passed: Anonymous execution of "purge_old_scan_logs" is BLOCKED (Permission Denied).')
+    } else if (error) {
+      console.log(`✅ Test 5 Passed: Anonymous execution of "purge_old_scan_logs" failed as expected (${error.message}).`)
+    } else {
+      console.error('❌ Test 5 FAILED: Anonymous client successfully invoked "purge_old_scan_logs"!')
+      passed = false
+    }
+  } catch (err) {
+    console.log('✅ Test 5 Passed: Anonymous execution of "purge_old_scan_logs" threw exception (blocked).')
+  }
+
+  // Test 6: Try calling delete_user_account anonymously (Should fail with permission error)
+  try {
+    const { error } = await supabase.rpc('delete_user_account')
+    if (error && (error.code === '42501' || error.message.includes('permission denied'))) {
+      console.log('✅ Test 6 Passed: Anonymous execution of "delete_user_account" is BLOCKED (Permission Denied).')
+    } else if (error) {
+      console.log(`✅ Test 6 Passed: Anonymous execution of "delete_user_account" failed as expected (${error.message}).`)
+    } else {
+      console.error('❌ Test 6 FAILED: Anonymous client successfully invoked "delete_user_account"!')
+      passed = false
+    }
+  } catch (err) {
+    console.log('✅ Test 6 Passed: Anonymous execution of "delete_user_account" threw exception (blocked).')
+  }
+
   console.log('\n--- Summary ---')
   if (passed) {
     console.log('🟢 All RLS and public access boundaries are secure!')

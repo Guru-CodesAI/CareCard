@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
-import { supabase, isSupabaseConfigured } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured, isDemoModeActive } from '@/lib/supabase'
 import { demoAuth, initDemoData } from '@/lib/demoStore'
 
 interface User {
@@ -22,7 +22,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
-  const isDemo = !isSupabaseConfigured()
+  const isDemo = isDemoModeActive()
 
   useEffect(() => {
     if (isDemo) {

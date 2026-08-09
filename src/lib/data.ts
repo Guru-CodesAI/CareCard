@@ -277,7 +277,7 @@ export async function deleteContact(id: string, caregiverId: string): Promise<bo
   return !error
 }
 
-export async function getPublicContacts(token: string): Promise<{ contact_name: string; relationship: string; contact_method: 'phone' | 'email'; contact_value: string; is_primary: boolean }[]> {
+export async function getPublicContacts(token: string): Promise<{ contact_name: string; relationship: string; contact_method: 'phone' | 'email'; is_primary: boolean }[]> {
   if (!useSupabase()) {
     const card = await demoCards.getByToken(token)
     if (!card || card.status !== 'active') return []

@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
-import { isSupabaseConfigured } from '@/lib/supabase'
+import { isSupabaseConfigured, isDemoModeActive } from '@/lib/supabase'
 import { AlertTriangle, KeyRound } from 'lucide-react'
 
 // Pages
@@ -61,8 +61,8 @@ export default function App() {
   const location = useLocation()
   const isScanPage = location.pathname.startsWith('/scan/')
 
-  // Production check: Block application if credentials are not configured
-  if (import.meta.env.PROD && !isSupabaseConfigured()) {
+  // Block application if credentials are not configured and demo mode is not active
+  if (!isSupabaseConfigured() && !isDemoModeActive()) {
     return (
       <div className="min-h-dvh flex items-center justify-center bg-warmgray-50 px-4 py-12">
         <div className="max-w-md w-full text-center bg-white p-8 rounded-2xl border border-red-100 shadow-xl page-enter">

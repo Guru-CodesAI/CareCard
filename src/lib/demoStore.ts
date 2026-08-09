@@ -178,15 +178,13 @@ export const demoContacts = {
     return true
   },
 
-  async getPublicContacts(cardId: string): Promise<Pick<TrustedContact, 'contact_name' | 'relationship' | 'contact_method' | 'contact_value' | 'is_primary'>[]> {
-    // In a real app, this would go through a server function to avoid exposing raw contact info
+  async getPublicContacts(cardId: string): Promise<Pick<TrustedContact, 'contact_name' | 'relationship' | 'contact_method' | 'is_primary'>[]> {
     return contacts
       .filter(c => c.card_id === cardId)
       .map(c => ({
         contact_name: c.contact_name,
         relationship: c.relationship,
         contact_method: c.contact_method,
-        contact_value: c.contact_value,
         is_primary: c.is_primary,
       }))
   },

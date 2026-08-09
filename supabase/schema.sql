@@ -203,7 +203,6 @@ RETURNS TABLE (
   contact_name text,
   relationship text,
   contact_method text,
-  contact_value text,
   is_primary boolean
 ) 
 SECURITY DEFINER
@@ -215,12 +214,6 @@ BEGIN
     tc.contact_name,
     tc.relationship,
     tc.contact_method,
-    CASE 
-      WHEN tc.contact_method = 'phone' THEN 
-        left(tc.contact_value, 4) || '••••' || right(tc.contact_value, 4)
-      ELSE 
-        left(split_part(tc.contact_value, '@', 1), 2) || '•••@' || split_part(tc.contact_value, '@', 2)
-    END as contact_value,
     tc.is_primary
   FROM trusted_contacts tc
   JOIN care_cards cc ON cc.id = tc.card_id
