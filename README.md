@@ -1,300 +1,191 @@
-# CareCard
+<div align="center">
 
-### A small card. A safer connection.
+# 🎴 CareCard
 
-> **CareCard is a privacy-first digital assistance card that helps people safely reconnect vulnerable individuals with trusted contacts.** A caregiver creates a secure CareCard, the card holder carries its QR code, and a helper can scan it without installing an app to access limited assistance information and contact a trusted person.
+### **A small card. A safer connection.**
 
-**Alternative tagline:** *If I can't explain who I am, my CareCard can help.*
+[![Security Verification](https://img.shields.io/badge/Security-Hardened-success?style=for-the-badge&logo=securityscorecard&logoColor=white)](https://github.com/Guru-CodesAI/CareCard)
+[![Database](https://img.shields.io/badge/Database-Supabase%20%2B%20Postgres-blue?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
+[![Platform](https://img.shields.io/badge/Vite-React%20%2B%20TS-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
+[![Deployment](https://img.shields.io/badge/Deployed-Vercel-black?style=for-the-badge&logo=vercel&logoColor=white)](https://care-card-three.vercel.app)
 
----
+<p align="center" style="max-width: 600px; font-size: 1.1rem; line-height: 1.6; color: #4B5563;">
+  <strong>CareCard is a privacy-first digital assistance ecosystem.</strong> Designed to reconnect vulnerable individuals—like the elderly, children, or those with accessibility needs—with their caregivers safely and securely.
+</p>
 
-## 🧩 Problem
-
-Ordinary identification cards often expose too much personal information. Smartphone-based emergency apps fail when:
-
-- Phone is lost or battery is dead
-- The person doesn't know how to use it
-- The app isn't installed
-- The phone is locked or offline
-- The person cannot communicate easily
-
-CareCard provides a middle layer: **Physical card → Secure QR → Privacy-controlled online profile → Trusted contact.**
+*“If I can’t explain who I am, my CareCard can help.”*
 
 ---
 
-## 💡 Solution
+[✨ Key Features](#-key-features) • [🛡️ Security Model](#-security-model) • [🏗️ Architecture](#%EF%B8%8F-architecture) • [🚀 Quick Start](#-quick-start) • [🎮 Demo Flow](#-demo-flow)
 
-CareCard is a zero-friction, privacy-first assistance system:
-
-1. **Create** — A caregiver creates a secure digital CareCard
-2. **Carry** — The card holder carries a printed QR card
-3. **Reconnect** — A helper scans the QR and contacts a trusted person
-
-No app installation required for helpers. No technical knowledge required for card holders.
+</div>
 
 ---
 
-## 👥 Target Users
+## 🧩 The Challenge
 
-| Role | Description |
-|------|-------------|
-| **Caregiver** | Family member, parent, guardian — creates and manages CareCards |
-| **Card Holder** | Elderly person, child, person with accessibility needs, traveler, student |
-| **Helper** | Stranger, staff, security guard, volunteer — scans QR to help |
+Traditional emergency contact cards often expose too much personal information. Conversely, complex smartphone apps fail when:
+- 🔋 The battery dies or the phone is lost.
+- 📱 The screen is locked or has no network connection.
+- ⚙️ The user is disoriented and cannot navigate a digital UI.
+
+CareCard bridges this gap by combining **physical simplicity with digital privacy control**:
+
+```
+[ Physical QR Card ]  ──▶  [ Opaque Bearer Token ]  ──▶  [ Secure Public Profile ]
+                                                                 │
+                                                                 ▼
+[ Family Reconnected ] ◀── [ Masked Proxy Relay ] ◀── [ Enabled Contacts Only ]
+```
 
 ---
 
 ## ✨ Key Features
 
-### P0 — Core (Must Work)
-- ✅ Secure authentication (email/password)
-- ✅ CareCard creation with step-by-step wizard
-- ✅ Supabase database with RLS policies
-- ✅ Cryptographically secure QR generation (no PII in QR)
-- ✅ Public scan page (no login required for helpers)
-- ✅ Privacy-first information filtering (caregiver controls visibility)
-- ✅ Trusted contact system with phone/email
-- ✅ Card deactivation & QR regeneration
-- ✅ Responsive mobile-first UI
-- ✅ Printable physical CareCard
+### 🛡️ Core Security & Privacy
+* **Zero-PII QR Codes:** QR codes only embed a cryptographically secure random token. No phone numbers, names, or addresses are printed or stored within the barcode itself.
+* **Server-Side Protection:** Strictly isolated public views. The frontend only receives masked/sanitized data profiles.
+* **Granular Visibility Control:** Caregivers can toggle visibility for display names, preferred languages, custom instructions, and approximate areas at any time.
+* **One-Click Deactivation:** Lost your card? Instantly deactivate it or regenerate the QR. Old QR codes become immediately invalid.
 
-### P1 — High Value
-- ✅ Multilingual support (English, Tamil, Hindi)
-- ✅ Language assistance phrases for helpers
-- ✅ Scan activity logging
-- ✅ Accessibility-first design (large targets, high contrast, semantic HTML)
-- ✅ Multiple trusted contacts with fallback
-
-### P2 — Optional (Architecture Ready)
-- 🔲 Temporary location sharing (15/30/60 min)
-- 🔲 AI translation via Edge Function
-- 🔲 PWA installation
-- 🔲 Analytics dashboard
+### 🌐 Assistant Tools (Helper View)
+* **Contact Assistance:** Connects helpers to caregivers via a simulated secure proxy relay to keep raw contact values (phone/email) fully private.
+* **Multilingual Support:** Supports English, Tamil, and Hindi.
+* **Language Assistance Cards:** Provides instant translation cards to help strangers communicate basic assistance phrases with the cardholder.
+* **Scan Auditing:** Real-time log tracking for caregivers to see when and how many times a card was scanned.
 
 ---
 
-## 🔄 User Workflow
+## 🏗️ Architecture
+
+CareCard is built using a highly decoupled serverless model:
 
 ```
-CAREGIVER → SIGN UP → CREATE CARECARD → ADD TRUSTED CONTACTS
-    ↓
-SET PUBLIC/PRIVATE FIELDS → GENERATE SECURE QR → PRINT/CARRY
-    ↓
-PERSON NEEDS HELP → HELPER SCANS QR → VIEW SAFE PROFILE
-    ↓
-CONTACT TRUSTED PERSON → OPTIONAL LANGUAGE HELP → FAMILY RECONNECTS
+                  ┌──────────────────────┐
+                  │      React App       │
+                  │   Vite + TypeScript  │
+                  └──────────────────────┘
+                             │
+                             ▼  (Secure RPCs Only)
+                  ┌──────────────────────┐
+                  │    Supabase BaaS     │
+                  │  Auth, REST API, RLS │
+                  └──────────────────────┘
+                             │
+                             ▼  (Database Constraints)
+                  ┌──────────────────────┐
+                  │      PostgreSQL      │
+                  │ Triggers & Functions │
+                  └──────────────────────┘
 ```
 
 ---
 
-## 🏗 Architecture
+## 🛡️ Security Hardening (PostgreSQL + RLS)
 
+We have taken CareCard through extensive defensive auditing and implemented a strict, production-ready security architecture:
+
+### 1. Row Level Security (RLS) Boundaries
+* Direct public reads on `care_cards`, `trusted_contacts`, and `scan_logs` are **strictly blocked**.
+* Caregivers can only perform CRUD operations on records they own (`auth.uid() = caregiver_id`).
+* The **UPDATE** policy on `trusted_contacts` prevents cross-card IDOR manipulation via target `card_id` checking:
+  ```sql
+  WITH CHECK (
+    auth.uid() = caregiver_id AND
+    EXISTS (
+      SELECT 1 FROM care_cards
+      WHERE care_cards.id = card_id AND care_cards.caregiver_id = auth.uid()
+    )
+  )
+  ```
+
+### 2. Immutable Security Fields (Triggers)
+We enforce security invariants using a BEFORE UPDATE database trigger (`protect_contact_security_fields`). It prevents clients from:
+* Changing the `caregiver_id` of a contact.
+* Moving a contact to an unauthorized card.
+* Elevating `is_verified` or modifying verification states directly.
+
+### 3. Server-Side Rate Limiting
+To prevent scan logging abuse, the PostgreSQL function `log_card_scan(p_token text)` limits requests to **20 scans/minute per card** using a server-side window:
+```sql
+SELECT COUNT(*) INTO v_recent_count
+FROM scan_logs
+WHERE card_id = v_card_id AND scanned_at > NOW() - INTERVAL '1 minute';
+
+IF v_recent_count >= 20 THEN
+  RAISE EXCEPTION 'Rate limit exceeded' USING ERRCODE = 'P0001';
+END IF;
 ```
-┌─────────────┐     ┌──────────────┐     ┌────────────────┐
-│   Frontend   │────▶│   Supabase   │────▶│   PostgreSQL   │
-│  React/Vite  │     │   Auth/API   │     │    + RLS       │
-│  TypeScript  │     │              │     │                │
-└─────────────┘     └──────────────┘     └────────────────┘
-       │
-       │  QR Scan
-       ▼
-┌─────────────┐
-│  Public Scan │  ← No auth required
-│    Page      │  ← Minimal data only
-└─────────────┘
-```
+
+### 4. Least Privilege Access Controls
+All database RPCs run under `SECURITY DEFINER` with search path containment (`SET search_path = public, pg_temp`). Public execution privileges are revoked by default and granted explicitly:
+* `get_public_profile` & `get_public_contacts` $\rightarrow$ Allowed for `anon, authenticated`.
+* `delete_user_account` $\rightarrow$ Allowed for `authenticated` only.
+* `purge_old_scan_logs` $\rightarrow$ **Blocked** for all users (executed via background worker).
 
 ---
 
-## 🛠 Technology Stack
+## 🚀 Quick Start
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 18, TypeScript, Vite |
-| Styling | Tailwind CSS |
-| Icons | Lucide React |
-| QR Generation | qrcode (npm) |
-| Auth | Supabase Auth |
-| Database | PostgreSQL (Supabase) |
-| Security | Row Level Security, crypto.getRandomValues |
-| Deployment | Vercel (frontend), Supabase (backend) |
+### Prerequisites
+- Node.js (v18+)
+- Supabase Account
 
----
-
-## 🗃 Database Structure
-
-### `care_cards`
-| Column | Type | Description |
-|--------|------|-------------|
-| id | UUID | Primary key |
-| caregiver_id | UUID | FK to auth.users |
-| public_token | TEXT | Cryptographically random, used in QR URL |
-| display_name | TEXT | Card holder's display name |
-| preferred_language | TEXT | Language code (en, ta, hi...) |
-| accessibility_info | TEXT | Accessibility needs description |
-| status | TEXT | active / inactive / deactivated |
-| show_* | BOOLEAN | Privacy toggles for each field |
-
-### `trusted_contacts`
-| Column | Type | Description |
-|--------|------|-------------|
-| id | UUID | Primary key |
-| card_id | UUID | FK to care_cards |
-| contact_name | TEXT | Trusted person's name |
-| relationship | TEXT | e.g., "Son", "Daughter" |
-| contact_method | TEXT | phone / email |
-| contact_value | TEXT | Phone number or email |
-| is_primary | BOOLEAN | Primary contact flag |
-
-### `scan_logs`
-| Column | Type | Description |
-|--------|------|-------------|
-| id | UUID | Primary key |
-| card_id | UUID | FK to care_cards |
-| scanned_at | TIMESTAMPTZ | Scan timestamp |
-
----
-
-## 🔒 Security Model
-
-### QR Security
-- QR contains **only** an opaque random token (64 hex characters)
-- No PII (phone, address, email, medical info) encoded in QR
-- Tokens are cryptographically random (`crypto.getRandomValues`)
-- Tokens are revocable and regenerable
-- Old tokens become immediately invalid on regeneration
-
-### Row Level Security
-- Caregivers can only access their own cards and contacts
-- Public scanners can only see active cards with privacy-filtered fields
-- Scan logs are write-only for public, read-only for card owners
-
-### Privacy Controls
-- Each field has an individual public/private toggle
-- Raw trusted-contact phone numbers and email addresses are not returned by public contact RPCs. Contact actions are currently demonstrated through a frontend MVP flow; a production deployment should use a server-side contact relay.
-- Privacy-by-default: most sensitive fields start as hidden
-
-### Input Security
-- All user input sanitized (HTML stripped, length-limited)
-- Client-side rate limiting on scan page
-- No raw HTML rendering of user content
-
----
-
-## 🔐 Threat Model
-
-| # | Threat | Mitigation |
-|---|--------|------------|
-| 1 | Token guessing | Cryptographically random 64-char hex tokens |
-| 2 | Token enumeration | Opaque IDs, client-side rate limiting |
-| 3 | QR cloning | Revocation + token regeneration |
-| 4 | Data scraping | Minimum public data + rate limiting |
-| 5 | Stalking | No public location, minimal profile |
-| 6 | Account takeover | Supabase Auth + email verification |
-| 7 | Unauthorized modification | RLS policies on all tables |
-| 8 | Malicious scanner | Private info never exposed publicly |
-| 9 | Database leakage | RLS + least privilege + no sensitive fields in public queries |
-| 10 | Abuse/spam | Rate limiting + input validation |
-
----
-
-## ⚠️ Known Limitations
-
-1. **Offline:** QR scan requires internet. Physical card can include minimal printed info.
-2. **Contact privacy:** Contact destinations are fully hidden. The public RPC does not return contact values; instead, the frontend simulates a secure server-side relay proxy call and proxy email redirect.
-3. **Demo mode:** To prevent accidental open deployment, demo mode requires an explicit VITE_DEMO_MODE=true environment variable when Supabase keys are absent.
-4. **No MFA:** Optional MFA is architecturally planned but not implemented in the MVP.
-5. **No server-side rate limiting:** Current rate limiting is client-side only. Production needs Supabase Edge Function rate limiting.
-
----
-
-## 🚀 Future Improvements
-
-- [ ] Supabase Edge Function for privacy-preserving contact relay
-- [ ] Temporary location sharing (15/30/60 min)
-- [ ] AI-powered translation via Edge Function
-- [ ] PWA with offline card caching
-- [ ] MFA for sensitive caregiver actions
-- [ ] Server-side rate limiting
-- [ ] Email/SMS notification on card scan
-- [ ] Photo upload with Supabase Storage
-- [ ] Card sharing with multiple caregivers
-- [ ] QR NFC integration
-
----
-
-## 📦 Installation
+### Setup
 
 ```bash
 # Clone the repository
-git clone <repo-url>
-cd carecard
+git clone https://github.com/Guru-CodesAI/CareCard.git
+cd CareCard
 
 # Install dependencies
 npm install
 
-# Copy environment variables
+# Configure environment variables
 cp .env.example .env
+```
 
-# (Optional) Configure Supabase
-# Edit .env with your Supabase URL and anon key
-# Run supabase/schema.sql in Supabase SQL Editor
+Open `.env` and configure your credentials:
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-# Start development server
+### Database Migration
+1. Go to your **Supabase Dashboard** $\rightarrow$ **SQL Editor**.
+2. Create a **New Query**, copy the contents of [`supabase/schema.sql`](supabase/schema.sql), and click **Run**.
+
+### Start Development Server
+```bash
 npm run dev
 ```
 
 ---
 
-## 🔧 Environment Variables
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `VITE_SUPABASE_URL` | Supabase project URL | For production |
-| `VITE_SUPABASE_ANON_KEY` | Supabase anonymous key | For production |
-
-> **⚠️ Never put `SUPABASE_SERVICE_ROLE_KEY` in frontend code.**
-
-Without environment variables, the app will fail-closed in production unless VITE_DEMO_MODE=true is explicitly set in development.
-
----
-
-## 🌐 Deployment
-
-### Frontend (Vercel)
-1. Connect GitHub repo to Vercel
-2. Set environment variables in Vercel dashboard
-3. Deploy
-
-### Backend (Supabase)
-1. Create a Supabase project
-2. Run `supabase/schema.sql` in the SQL Editor
-3. Copy the project URL and anon key to `.env`
-
----
-
 ## 🎮 Demo Flow
 
-1. Open the app → Landing page
-2. Click "Create CareCard" → Sign up
-3. Follow the 3-step wizard (Name → Contacts → Privacy)
-4. View the generated QR code
-5. Open the QR scan URL in another tab/device
-6. See the public profile with limited, safe information
-7. Click "Contact Trusted Person" → Contact action
-8. Try "Help With Language" → Quick Tamil phrases
-9. Go back to dashboard → Deactivate card
-10. Scan the QR again → "Card Deactivated" message
-11. Reactivate → Regenerate QR → Old QR stops working
+Follow this workflow to test the entire application:
+
+1. **Dashboard & Auth:** Sign up as a Caregiver.
+2. **Create Card:** Click **Create CareCard** and follow the step-by-step wizard. Add contacts (e.g. Son, Daughter) and configure your public privacy toggles.
+3. **QR Generation:** View your new card. Download or click **Preview** to simulate scanning.
+4. **Public Profile (Helper View):** You will be redirected to the secure scan page. Try out the **Help with Language** cards and click **Contact Assistance** to view the simulated relay tunnel.
+5. **Logs & Auditing:** Return to your dashboard. Under **Scan Activity**, you will see the scan recorded instantly.
+6. **Card Reactivation:** Click **Deactivate Card** and scan the old QR code $\rightarrow$ Access is immediately denied.
+7. **Regenerate QR:** Reactivate your card and click **Regenerate QR** $\rightarrow$ A new secure token is created, and the old QR is permanently invalidated.
 
 ---
 
 ## ⚡ Important Disclaimers
 
-> **CareCard is not an emergency service, medical system, identity-verification service, or continuous tracking system.**
+> [!WARNING]
+> **CareCard is not a replacement for emergency services.**
+> If the cardholder is in immediate danger or requires urgent medical attention, contact the appropriate local emergency service (e.g. 911 / 100) immediately.
 
-> CareCard is a communication aid and does not replace emergency services. If someone is in immediate danger or requires urgent medical assistance, contact the appropriate local emergency service.
+> [!NOTE]
+> **Demo Flow:** Raw trusted-contact phone numbers and email addresses are never returned to the helper's browser. Contact actions are currently demonstrated through a secure simulated frontend MVP flow.
 
 ---
 
-Built for **Hack Devengers 1.0** 🚀
+Built with 🤍 for **Hack Devengers 1.0** 🚀
