@@ -254,7 +254,7 @@ export async function createContact(
       ...sanitized,
       card_id: cardId,
       caregiver_id: caregiverId,
-      is_verified: false,
+      is_verified: true,
     })
     .select()
     .single()

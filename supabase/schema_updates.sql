@@ -24,8 +24,22 @@ ALTER TABLE care_cards ENABLE ROW LEVEL SECURITY;
 
 -- B. Trusted Contacts
 -- Fix authorization flaw: Caregivers can only insert contacts into cards they actually own
+DROP POLICY IF EXISTS "Caregivers can create own contacts" ON trusted_contacts;
 CREATE POLICY "Caregivers can create own contacts"
   ON trusted_contacts FOR INSERT TO authenticated
+  WITH CHECK (
+    auth.uid() = caregiver_id AND
+    EXISTS (
+      SELECT 1 FROM care_cards
+      WHERE care_cards.id = card_id
+      AND care_cards.caregiver_id = auth.uid()
+    )
+  );
+
+DROP POLICY IF EXISTS "Caregivers can update own contacts" ON trusted_contacts;
+CREATE POLICY "Caregivers can update own contacts"
+  ON trusted_contacts FOR UPDATE TO authenticated
+  USING (auth.uid() = caregiver_id)
   WITH CHECK (
     auth.uid() = caregiver_id AND
     EXISTS (

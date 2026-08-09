@@ -424,10 +424,10 @@ export function ScanPage() {
             )}
 
             <h3 className="text-lg font-bold text-warmgray-900 mb-1">
-              Secure Privacy Shield
+              Contact Assistance
             </h3>
             <p className="text-xs text-warmgray-400 mb-4 font-medium uppercase tracking-wider">
-              Anonymous Contact Relay
+              Simulated Secure Proxy Relay
             </p>
 
             <div className="w-full bg-warmgray-50 rounded-xl p-4 border border-warmgray-100 mb-6 text-left">
@@ -455,7 +455,7 @@ export function ScanPage() {
             ) : (
               <div className="w-full space-y-4">
                 <p className="text-xs text-warmgray-600 leading-relaxed bg-green-50/50 text-green-800 p-3 rounded-lg border border-green-100">
-                  🛡️ <strong>Privacy Shield Active:</strong> The caregiver's raw contact details are never exposed to your browser logs. 
+                  🛡️ <strong>Demo Simulation:</strong> In production, this request connects to a server-side proxy relay (e.g. Twilio/SendGrid). Your browser receives no PII.
                 </p>
                 
                 {relayType === 'phone' ? (
@@ -468,7 +468,7 @@ export function ScanPage() {
                   </a>
                 ) : (
                   <a
-                    href={`mailto:relay-session@carecard.org?subject=CareCard%20Secure%20Relay%20[${token}]`}
+                    href={`mailto:relay-session@carecard.org?subject=CareCard%20Secure%20Relay%20[ID:${token?.substring(0, 8)}]`}
                     className="btn-primary w-full py-3 flex items-center justify-center gap-2"
                   >
                     <Mail className="w-4 h-4" />

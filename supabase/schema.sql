@@ -121,8 +121,16 @@ CREATE POLICY "Caregivers can create own contacts"
   );
 
 CREATE POLICY "Caregivers can update own contacts"
-  ON trusted_contacts FOR UPDATE
-  USING (auth.uid() = caregiver_id);
+  ON trusted_contacts FOR UPDATE TO authenticated
+  USING (auth.uid() = caregiver_id)
+  WITH CHECK (
+    auth.uid() = caregiver_id AND
+    EXISTS (
+      SELECT 1 FROM care_cards
+      WHERE care_cards.id = card_id
+      AND care_cards.caregiver_id = auth.uid()
+    )
+  );
 
 CREATE POLICY "Caregivers can delete own contacts"
   ON trusted_contacts FOR DELETE
