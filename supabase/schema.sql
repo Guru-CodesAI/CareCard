@@ -289,6 +289,6 @@ GRANT EXECUTE ON FUNCTION public.get_public_contacts(text) TO anon, authenticate
 GRANT EXECUTE ON FUNCTION public.log_card_scan(text) TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.delete_user_account() TO authenticated;
 REVOKE EXECUTE ON FUNCTION public.delete_user_account() FROM anon, public;
-GRANT EXECUTE ON FUNCTION public.purge_old_scan_logs() TO authenticated;
-REVOKE EXECUTE ON FUNCTION public.purge_old_scan_logs() FROM anon, public;
+REVOKE EXECUTE ON FUNCTION public.purge_old_scan_logs() FROM authenticated, anon, public;
+
 

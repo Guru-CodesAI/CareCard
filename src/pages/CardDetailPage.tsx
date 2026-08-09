@@ -253,14 +253,19 @@ export function CardDetailPage() {
           </div>
           <div className="p-3 rounded-lg bg-warmgray-50">
             <div className="text-xs text-warmgray-400 mb-1 flex items-center gap-1">
-              <Accessibility className="w-3 h-3" /> Accessibility
+              <Accessibility className="w-3 h-3" /> Assistance Needs & Accessibility
             </div>
             {editing ? (
-              <textarea
-                value={editData.accessibility_info ?? card.accessibility_info}
-                onChange={(e) => setEditData({ ...editData, accessibility_info: e.target.value })}
-                className="input-field text-sm py-1.5 min-h-[60px]"
-              />
+              <>
+                <p className="text-[10px] text-amber-600 mb-1 leading-tight">
+                  ⚠️ Avoid entering sensitive medical diagnoses/PII.
+                </p>
+                <textarea
+                  value={editData.accessibility_info ?? card.accessibility_info}
+                  onChange={(e) => setEditData({ ...editData, accessibility_info: e.target.value })}
+                  className="input-field text-sm py-1.5 min-h-[60px]"
+                />
+              </>
             ) : (
               <div className="font-medium text-warmgray-800 text-sm">
                 {card.accessibility_info || 'None specified'}

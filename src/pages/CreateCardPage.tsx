@@ -40,7 +40,7 @@ export function CreateCardPage() {
   // Step 3 - Privacy
   const [showDisplayName, setShowDisplayName] = useState(true)
   const [showLanguage, setShowLanguage] = useState(true)
-  const [showAccessibility, setShowAccessibility] = useState(true)
+  const [showAccessibility, setShowAccessibility] = useState(false)
   const [showArea, setShowArea] = useState(false)
   const [showInstructions, setShowInstructions] = useState(false)
   const [approximateArea, setApproximateArea] = useState('')
@@ -216,12 +216,15 @@ export function CreateCardPage() {
                 </select>
               </div>
 
-              {/* Accessibility */}
+              {/* Accessibility / Assistance Needs */}
               <div>
-                <label htmlFor="create-accessibility" className="label flex items-center gap-1.5">
+                <label htmlFor="create-accessibility" className="label flex items-center gap-1.5 mb-1">
                   <Accessibility className="w-4 h-4 text-warmgray-400" />
-                  Accessibility Assistance (optional)
+                  Assistance Needs & Accessibility (optional)
                 </label>
+                <p className="text-[11px] text-amber-600 mb-2 leading-normal">
+                  ⚠️ <strong>Privacy Notice:</strong> Only describe general assistance needs (e.g. "Needs a communication guide"). For your privacy, do <strong>not</strong> enter specific medical diagnoses, medications, full addresses, or other sensitive details.
+                </p>
                 <textarea
                   id="create-accessibility"
                   value={accessibilityInfo}
