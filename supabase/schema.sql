@@ -54,6 +54,7 @@ CREATE TABLE trusted_contacts (
 
 CREATE INDEX idx_trusted_contacts_card_id ON trusted_contacts(card_id);
 CREATE INDEX idx_trusted_contacts_caregiver_id ON trusted_contacts(caregiver_id);
+CREATE UNIQUE INDEX one_primary_contact_per_card ON trusted_contacts(card_id) WHERE is_primary = TRUE;
 
 -- ============================================
 -- 3. Scan Logs Table
@@ -218,7 +219,7 @@ BEGIN
     tc.is_primary
   FROM trusted_contacts tc
   JOIN care_cards cc ON cc.id = tc.card_id
-  WHERE cc.public_token = p_token AND cc.status = 'active'
+  WHERE cc.public_token = p_token AND cc.status = 'active' AND tc.is_verified = TRUE
   ORDER BY tc.is_primary DESC;
 END;
 $$;

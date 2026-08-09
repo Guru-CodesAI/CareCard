@@ -39,6 +39,10 @@ CREATE POLICY "Caregivers can create own contacts"
 -- Prevent arbitrary log forging. Restrict table insertion to internal/authenticated only
 ALTER TABLE scan_logs ENABLE ROW LEVEL SECURITY;
 
+-- D. Database Constraints & Integrity
+CREATE UNIQUE INDEX IF NOT EXISTS one_primary_contact_per_card 
+  ON trusted_contacts(card_id) WHERE is_primary = TRUE;
+
 -- Caregivers can read scan logs for their own cards (already configured)
 -- Public scan insertion is disabled on the table directly. Will use RPC instead.
 
@@ -99,7 +103,7 @@ BEGIN
     tc.is_primary
   FROM trusted_contacts tc
   JOIN care_cards cc ON cc.id = tc.card_id
-  WHERE cc.public_token = p_token AND cc.status = 'active'
+  WHERE cc.public_token = p_token AND cc.status = 'active' AND tc.is_verified = TRUE
   ORDER BY tc.is_primary DESC;
 END;
 $$;
