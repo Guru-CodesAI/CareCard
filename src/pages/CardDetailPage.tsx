@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import { getCardById, getContacts, getScanLogs, deactivateCard, activateCard, regenerateQR, deleteContact, createContact, updateCard } from '@/lib/data'
+import { getCardById, getContacts, getScanLogs, deactivateCard, activateCard, regenerateQR, deleteContact, createContact, updateCard, updateContact } from '@/lib/data'
 import { getLanguageDisplay, formatDate, generateShortId, isValidPhone, isValidEmail } from '@/lib/utils'
 import { CareCard, TrustedContact, ScanLog } from '@/types'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
@@ -410,14 +410,37 @@ export function CardDetailPage() {
                     {contact.contact_value}
                   </div>
                 </div>
-                <button
-                  onClick={() => handleDeleteContact(contact.id)}
-                  disabled={actionLoading === `deleteContact-${contact.id}`}
-                  className="p-1.5 rounded hover:bg-red-50 text-warmgray-400 hover:text-red-500 transition-colors"
-                  aria-label={`Remove ${contact.contact_name}`}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={async () => {
+                      setActionLoading(`toggleContact-${contact.id}`)
+                      try {
+                        await updateContact(contact.id, { contact_enabled: !contact.contact_enabled }, user!.id)
+                        loadData()
+                      } catch (err) {
+                        setError('Failed to update contact visibility.')
+                      } finally {
+                        setActionLoading('')
+                      }
+                    }}
+                    disabled={actionLoading === `toggleContact-${contact.id}`}
+                    className={`text-xs px-2.5 py-1 rounded-full transition-all font-semibold flex items-center gap-1 ${
+                      contact.contact_enabled 
+                        ? 'bg-green-50 text-green-700 border border-green-200 hover:bg-green-100' 
+                        : 'bg-warmgray-100 text-warmgray-500 border border-warmgray-200 hover:bg-warmgray-200'
+                    }`}
+                  >
+                    {contact.contact_enabled ? '✓ Enabled' : 'Disabled'}
+                  </button>
+                  <button
+                    onClick={() => handleDeleteContact(contact.id)}
+                    disabled={actionLoading === `deleteContact-${contact.id}`}
+                    className="p-1.5 rounded hover:bg-red-50 text-warmgray-400 hover:text-red-500 transition-colors"
+                    aria-label={`Remove ${contact.contact_name}`}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -436,6 +459,7 @@ export function CardDetailPage() {
           <Toggle id="detail-show-access" checked={card.show_accessibility} onChange={async (v) => { await updateCard(card.id, { show_accessibility: v }, user!.id); loadData() }} label="Accessibility assistance" />
           <Toggle id="detail-show-instr" checked={card.show_instructions} onChange={async (v) => { await updateCard(card.id, { show_instructions: v }, user!.id); loadData() }} label="Custom instructions" />
           <Toggle id="detail-show-area" checked={card.show_area} onChange={async (v) => { await updateCard(card.id, { show_area: v }, user!.id); loadData() }} label="Approximate area" />
+          <Toggle id="detail-show-contacts" checked={card.show_trusted_contact} onChange={async (v) => { await updateCard(card.id, { show_trusted_contact: v }, user!.id); loadData() }} label="Show trusted contacts" />
         </div>
       </div>
 

@@ -56,6 +56,7 @@ export async function createCard(
     show_accessibility?: boolean
     show_area?: boolean
     show_instructions?: boolean
+    show_trusted_contact?: boolean
     approximate_area?: string
   },
   caregiverId: string
@@ -71,6 +72,7 @@ export async function createCard(
     show_accessibility: data.show_accessibility ?? true,
     show_area: data.show_area ?? false,
     show_instructions: data.show_instructions ?? false,
+    show_trusted_contact: data.show_trusted_contact ?? true,
   }
 
   if (!useSupabase()) {
@@ -255,12 +257,34 @@ export async function createContact(
       card_id: cardId,
       caregiver_id: caregiverId,
       is_verified: true,
+      contact_enabled: true,
     })
     .select()
     .single()
 
   if (error) throw new Error(error.message)
   return contact
+}
+
+export async function updateContact(
+  id: string,
+  data: Partial<TrustedContact>,
+  caregiverId: string
+): Promise<TrustedContact | null> {
+  if (!useSupabase()) {
+    return demoContacts.update(id, data, caregiverId)
+  }
+
+  const { data: updated, error } = await supabase
+    .from('trusted_contacts')
+    .update(data)
+    .eq('id', id)
+    .eq('caregiver_id', caregiverId)
+    .select()
+    .single()
+
+  if (error) throw new Error(error.message)
+  return updated
 }
 
 export async function deleteContact(id: string, caregiverId: string): Promise<boolean> {

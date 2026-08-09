@@ -26,6 +26,7 @@ CREATE TABLE care_cards (
   show_accessibility BOOLEAN NOT NULL DEFAULT TRUE,
   show_area BOOLEAN NOT NULL DEFAULT FALSE,
   show_instructions BOOLEAN NOT NULL DEFAULT FALSE,
+  show_trusted_contact BOOLEAN NOT NULL DEFAULT TRUE,
   approximate_area TEXT DEFAULT '' CHECK (char_length(approximate_area) <= 200),
   
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -49,6 +50,7 @@ CREATE TABLE trusted_contacts (
   contact_value TEXT NOT NULL CHECK (char_length(contact_value) <= 50),
   is_primary BOOLEAN NOT NULL DEFAULT FALSE,
   is_verified BOOLEAN NOT NULL DEFAULT FALSE,
+  contact_enabled BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -139,6 +141,43 @@ CREATE POLICY "Caregivers can delete own contacts"
 -- NOTE: Direct SELECT on trusted_contacts is disabled for public (anon) roles.
 -- Public contact retrieval is routed securely through RPC (get_public_contacts).
 
+-- Trigger to prevent client-side modifications of security-critical fields
+CREATE OR REPLACE FUNCTION public.prevent_contact_security_field_changes()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = public
+AS $$
+BEGIN
+  IF NEW.caregiver_id IS DISTINCT FROM OLD.caregiver_id THEN
+    RAISE EXCEPTION 'caregiver_id cannot be changed';
+  END IF;
+
+  IF NEW.card_id IS DISTINCT FROM OLD.card_id THEN
+    IF NOT EXISTS (
+      SELECT 1
+      FROM public.care_cards
+      WHERE id = NEW.card_id
+        AND caregiver_id = auth.uid()
+    ) THEN
+      RAISE EXCEPTION 'Invalid target card';
+    END IF;
+  END IF;
+
+  IF NEW.is_verified IS DISTINCT FROM OLD.is_verified THEN
+    RAISE EXCEPTION 'is_verified cannot be changed directly';
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS protect_contact_security_fields ON public.trusted_contacts;
+CREATE TRIGGER protect_contact_security_fields
+  BEFORE UPDATE ON public.trusted_contacts
+  FOR EACH ROW
+  EXECUTE FUNCTION public.prevent_contact_security_field_changes();
+
 -- ======== SCAN LOGS ========
 
 -- Caregivers can read scan logs for their own cards
@@ -187,7 +226,7 @@ RETURNS TABLE (
   status text
 ) 
 SECURITY DEFINER
-SET search_path = public
+SET search_path = public, pg_temp
 LANGUAGE plpgsql AS $$
 BEGIN
   RETURN QUERY
@@ -215,7 +254,7 @@ RETURNS TABLE (
   is_primary boolean
 ) 
 SECURITY DEFINER
-SET search_path = public
+SET search_path = public, pg_temp
 LANGUAGE plpgsql AS $$
 BEGIN
   RETURN QUERY
@@ -226,7 +265,11 @@ BEGIN
     tc.is_primary
   FROM trusted_contacts tc
   JOIN care_cards cc ON cc.id = tc.card_id
-  WHERE cc.public_token = p_token AND cc.status = 'active' AND tc.is_verified = TRUE
+  WHERE cc.public_token = p_token 
+    AND cc.status = 'active' 
+    AND cc.show_trusted_contact = TRUE
+    AND tc.is_verified = TRUE 
+    AND tc.contact_enabled = TRUE
   ORDER BY tc.is_primary DESC;
 END;
 $$;
@@ -236,18 +279,31 @@ $$;
 CREATE OR REPLACE FUNCTION public.log_card_scan(p_token text)
 RETURNS void 
 SECURITY DEFINER
-SET search_path = public
+SET search_path = public, pg_temp
 LANGUAGE plpgsql AS $$
 DECLARE
   v_card_id UUID;
+  v_recent_count INTEGER;
 BEGIN
   SELECT id INTO v_card_id 
   FROM care_cards 
-  WHERE public_token = p_token AND status = 'active';
+  WHERE public_token = p_token AND status = 'active'
+  LIMIT 1;
   
-  IF v_card_id IS NOT NULL THEN
-    INSERT INTO scan_logs (card_id) VALUES (v_card_id);
+  IF v_card_id IS NULL THEN
+    RETURN;
   END IF;
+
+  -- Server-side rate limit: max 20 scans per minute per card to prevent log flooding
+  SELECT COUNT(*) INTO v_recent_count
+  FROM scan_logs
+  WHERE card_id = v_card_id AND scanned_at > NOW() - INTERVAL '1 minute';
+
+  IF v_recent_count >= 20 THEN
+    RAISE EXCEPTION 'Rate limit exceeded' USING ERRCODE = 'P0001';
+  END IF;
+
+  INSERT INTO scan_logs (card_id) VALUES (v_card_id);
 END;
 $$;
 
@@ -257,7 +313,7 @@ $$;
 CREATE OR REPLACE FUNCTION public.delete_user_account()
 RETURNS void 
 SECURITY DEFINER
-SET search_path = public
+SET search_path = public, pg_temp
 LANGUAGE plpgsql AS $$
 DECLARE
   v_user_id UUID;
@@ -277,7 +333,7 @@ $$;
 CREATE OR REPLACE FUNCTION public.purge_old_scan_logs()
 RETURNS integer
 SECURITY DEFINER
-SET search_path = public
+SET search_path = public, pg_temp
 LANGUAGE plpgsql AS $$
 DECLARE
   deleted_count integer;
@@ -292,11 +348,17 @@ $$;
 -- --------------------------------------------
 -- 7. Grant execution permissions
 -- --------------------------------------------
+-- Revoke all default execution permissions first
+REVOKE ALL ON FUNCTION public.get_public_profile(text) FROM public, anon, authenticated;
+REVOKE ALL ON FUNCTION public.get_public_contacts(text) FROM public, anon, authenticated;
+REVOKE ALL ON FUNCTION public.log_card_scan(text) FROM public, anon, authenticated;
+REVOKE ALL ON FUNCTION public.delete_user_account() FROM public, anon, authenticated;
+REVOKE ALL ON FUNCTION public.purge_old_scan_logs() FROM public, anon, authenticated;
+
+-- Grant execution explicitly to specific roles
 GRANT EXECUTE ON FUNCTION public.get_public_profile(text) TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.get_public_contacts(text) TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.log_card_scan(text) TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.delete_user_account() TO authenticated;
-REVOKE EXECUTE ON FUNCTION public.delete_user_account() FROM anon, public;
-REVOKE EXECUTE ON FUNCTION public.purge_old_scan_logs() FROM authenticated, anon, public;
 
 

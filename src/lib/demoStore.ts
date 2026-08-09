@@ -108,6 +108,7 @@ export const demoCards = {
       show_accessibility: data.show_accessibility ?? true,
       show_area: data.show_area ?? false,
       show_instructions: data.show_instructions ?? false,
+      show_trusted_contact: data.show_trusted_contact ?? true,
       approximate_area: data.approximate_area || '',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -165,10 +166,18 @@ export const demoContacts = {
       contact_value: data.contact_value || '',
       is_primary: data.is_primary ?? false,
       is_verified: true, // Auto-verify in demo
+      contact_enabled: data.contact_enabled ?? true,
       created_at: new Date().toISOString(),
     }
     contacts.push(contact)
     return contact
+  },
+
+  async update(id: string, data: Partial<TrustedContact>, caregiverId: string): Promise<TrustedContact | null> {
+    const index = contacts.findIndex(c => c.id === id && c.caregiver_id === caregiverId)
+    if (index === -1) return null
+    contacts[index] = { ...contacts[index], ...data }
+    return contacts[index]
   },
 
   async delete(id: string, caregiverId: string): Promise<boolean> {
@@ -236,7 +245,8 @@ export function initDemoData() {
     show_accessibility: true,
     show_area: false,
     show_instructions: true,
-    approximate_area: 'T. Nagar, Chennai',
+    show_trusted_contact: true,
+    approximate_area: 'Chennai, TN',
     created_at: new Date(Date.now() - 7 * 86400000).toISOString(),
     updated_at: new Date().toISOString(),
   }
@@ -253,6 +263,7 @@ export function initDemoData() {
     contact_value: '+91 98765 43210',
     is_primary: true,
     is_verified: true,
+    contact_enabled: true,
     created_at: new Date(Date.now() - 7 * 86400000).toISOString(),
   })
 
@@ -266,6 +277,7 @@ export function initDemoData() {
     contact_value: '+91 98765 43211',
     is_primary: false,
     is_verified: true,
+    contact_enabled: true,
     created_at: new Date(Date.now() - 7 * 86400000).toISOString(),
   })
 

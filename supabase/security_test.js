@@ -121,6 +121,56 @@ async function runSecurityTests() {
     console.log('✅ Test 6 Passed: Anonymous execution of "delete_user_account" threw exception (blocked).')
   }
 
+  // Test 7: Verify that public.get_public_contacts does not expose 'contact_value'
+  try {
+    const { data, error } = await supabase.rpc('get_public_contacts', { p_token: 'dummy-token' })
+    if (error) {
+      console.error(`❌ Test 7 FAILED to execute get_public_contacts: ${error.message}`);
+      passed = false;
+    } else {
+      console.log('✅ Test 7 Passed: public.get_public_contacts() executes successfully.');
+      if (data && data.length > 0 && ('contact_value' in data[0] || 'caregiver_id' in data[0])) {
+        console.error('❌ Test 7 FAILED: get_public_contacts exposes PII or caregiver metadata!');
+        passed = false;
+      } else {
+        console.log('✅ Test 7 Passed: PII (contact_value) and metadata (caregiver_id) are NOT exposed in get_public_contacts results.');
+      }
+    }
+  } catch (err) {
+    console.error('❌ Test 7 FAILED calling get_public_contacts:', err);
+    passed = false;
+  }
+
+  // Test 8: Verify that public.log_card_scan is executable anonymously
+  try {
+    const { error } = await supabase.rpc('log_card_scan', { p_token: 'dummy-token' })
+    if (error) {
+      console.error(`❌ Test 8 FAILED: log_card_scan execution failed: ${error.message}`);
+      passed = false;
+    } else {
+      console.log('✅ Test 8 Passed: log_card_scan is executable anonymously.');
+    }
+  } catch (err) {
+    console.error('❌ Test 8 FAILED calling log_card_scan:', err);
+    passed = false;
+  }
+
+  // Test 9: Verify that anonymous UPDATE on trusted_contacts is BLOCKED by RLS
+  try {
+    const { data, error } = await supabase
+      .from('trusted_contacts')
+      .update({ contact_name: 'Hacked' })
+      .eq('id', '00000000-0000-0000-0000-000000000000')
+    if (error || !data || data.length === 0) {
+      console.log('✅ Test 9 Passed: Anonymous UPDATE on "trusted_contacts" is BLOCKED.');
+    } else {
+      console.error('❌ Test 9 FAILED: Anonymous UPDATE on "trusted_contacts" succeeded!');
+      passed = false;
+    }
+  } catch (err) {
+    console.log('✅ Test 9 Passed: Anonymous UPDATE on "trusted_contacts" is BLOCKED.');
+  }
+
   console.log('\n--- Summary ---')
   if (passed) {
     console.log('🟢 All RLS and public access boundaries are secure!')

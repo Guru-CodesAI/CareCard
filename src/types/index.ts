@@ -18,6 +18,7 @@ export interface CareCard {
   show_accessibility: boolean
   show_area: boolean
   show_instructions: boolean
+  show_trusted_contact: boolean
   approximate_area: string
   created_at: string
   updated_at: string
@@ -35,6 +36,7 @@ export interface TrustedContact {
   contact_value: string
   is_primary: boolean
   is_verified: boolean
+  contact_enabled: boolean
   created_at: string
 }
 
