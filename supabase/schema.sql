@@ -198,6 +198,7 @@ $$;
 
 -- B. Secure Public Contacts Retrieval
 -- Only exposes contacts if the card is active and the secure public_token matches.
+DROP FUNCTION IF EXISTS public.get_public_contacts(text);
 CREATE OR REPLACE FUNCTION public.get_public_contacts(p_token text)
 RETURNS TABLE (
   contact_name text,
