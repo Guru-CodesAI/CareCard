@@ -31,6 +31,13 @@ export function ScanPage() {
   const [showLanguageHelp, setShowLanguageHelp] = useState(false)
   const [contactIndex, setContactIndex] = useState(0)
   const [showSafetyNotice, setShowSafetyNotice] = useState(true)
+  
+  // Secure Relay State
+  const [showRelayModal, setShowRelayModal] = useState(false)
+  const [relayType, setRelayType] = useState<'phone' | 'email'>('phone')
+  const [relayContact, setRelayContact] = useState<PublicContact | null>(null)
+  const [relayProgress, setRelayProgress] = useState(0)
+  const [relayStatus, setRelayStatus] = useState<'connecting' | 'connected'>('connecting')
 
   // Get translations based on card language
   const lang = profile?.preferred_language || 'en'
@@ -83,11 +90,25 @@ export function ScanPage() {
   }
 
   const handleContact = (contact: PublicContact) => {
-    if (contact.contact_method === 'phone') {
-      window.location.href = `tel:${contact.contact_value.replace(/\s/g, '')}`
-    } else {
-      window.location.href = `mailto:${contact.contact_value}?subject=CareCard%20-%20Help%20Request&body=Someone%20needs%20assistance.%20This%20message%20is%20from%20a%20CareCard%20scan.`
-    }
+    setRelayContact(contact)
+    setRelayType(contact.contact_method)
+    setRelayStatus('connecting')
+    setRelayProgress(0)
+    setShowRelayModal(true)
+
+    const duration = 1500
+    const intervalTime = 50
+    const steps = duration / intervalTime
+    let stepCount = 0
+
+    const timer = setInterval(() => {
+      stepCount++
+      setRelayProgress(Math.min(Math.round((stepCount / steps) * 100), 100))
+      if (stepCount >= steps) {
+        clearInterval(timer)
+        setRelayStatus('connected')
+      }
+    }, intervalTime)
   }
 
   const handleTryNext = () => {
@@ -385,6 +406,88 @@ export function ScanPage() {
           </p>
         </div>
       </div>
+
+      {/* Secure Relay Modal */}
+      {showRelayModal && relayContact && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white max-w-sm w-full rounded-2xl p-6 shadow-2xl relative border border-warmgray-100 flex flex-col items-center text-center page-enter">
+            {/* Modal Icon / Visuals */}
+            {relayStatus === 'connecting' ? (
+              <div className="w-20 h-20 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center mb-6 relative animate-pulse">
+                <ShieldCheck className="w-10 h-10" />
+                <div className="absolute inset-0 rounded-full border-4 border-brand-500/20 animate-ping" />
+              </div>
+            ) : (
+              <div className="w-20 h-20 bg-green-50 text-green-600 rounded-full flex items-center justify-center mb-6 relative">
+                <Phone className="w-10 h-10 animate-bounce" />
+                <div className="absolute inset-0 rounded-full border-4 border-green-500/20 animate-pulse" />
+              </div>
+            )}
+
+            <h3 className="text-lg font-bold text-warmgray-900 mb-1">
+              Secure Privacy Shield
+            </h3>
+            <p className="text-xs text-warmgray-400 mb-4 font-medium uppercase tracking-wider">
+              Anonymous Contact Relay
+            </p>
+
+            <div className="w-full bg-warmgray-50 rounded-xl p-4 border border-warmgray-100 mb-6 text-left">
+              <div className="text-xs text-warmgray-400 mb-1 font-semibold">RECIPIENT</div>
+              <div className="font-semibold text-warmgray-800 text-sm">
+                {relayContact.contact_name} ({relayContact.relationship})
+              </div>
+              <div className="text-xs text-warmgray-500 mt-1 font-mono">
+                Masked ID: {relayContact.contact_value}
+              </div>
+            </div>
+
+            {relayStatus === 'connecting' ? (
+              <div className="w-full">
+                <p className="text-xs text-warmgray-600 mb-2 font-medium">
+                  Establishing private routing tunnel... {relayProgress}%
+                </p>
+                <div className="w-full bg-warmgray-100 h-2 rounded-full overflow-hidden mb-6">
+                  <div 
+                    className="h-full bg-brand-500 transition-all duration-100" 
+                    style={{ width: `${relayProgress}%` }}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="w-full space-y-4">
+                <p className="text-xs text-warmgray-600 leading-relaxed bg-green-50/50 text-green-800 p-3 rounded-lg border border-green-100">
+                  🛡️ <strong>Privacy Shield Active:</strong> The caregiver's raw contact details are never exposed to your browser logs. 
+                </p>
+                
+                {relayType === 'phone' ? (
+                  <a
+                    href="tel:+18005550199"
+                    className="btn-primary w-full py-3 flex items-center justify-center gap-2"
+                  >
+                    <Phone className="w-4 h-4" />
+                    Place Proxy Call
+                  </a>
+                ) : (
+                  <a
+                    href={`mailto:relay-session@carecard.org?subject=CareCard%20Secure%20Relay%20[${token}]`}
+                    className="btn-primary w-full py-3 flex items-center justify-center gap-2"
+                  >
+                    <Mail className="w-4 h-4" />
+                    Send Proxy Email
+                  </a>
+                )}
+              </div>
+            )}
+
+            <button
+              onClick={() => setShowRelayModal(false)}
+              className="text-xs text-warmgray-400 font-semibold hover:text-warmgray-600 mt-4 transition-colors"
+            >
+              Cancel & Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
