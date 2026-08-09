@@ -3,6 +3,8 @@ import { useAuth } from '@/contexts/AuthContext'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
+import { isSupabaseConfigured } from '@/lib/supabase'
+import { AlertTriangle, KeyRound } from 'lucide-react'
 
 // Pages
 import { LandingPage } from '@/pages/LandingPage'
@@ -15,6 +17,7 @@ import { PrintCardPage } from '@/pages/PrintCardPage'
 import { SettingsPage } from '@/pages/SettingsPage'
 import { PrivacyPage } from '@/pages/PrivacyPage'
 import { HelpPage } from '@/pages/HelpPage'
+
 
 // Protected route wrapper
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -58,8 +61,44 @@ export default function App() {
   const location = useLocation()
   const isScanPage = location.pathname.startsWith('/scan/')
 
+  // Production check: Block application if credentials are not configured
+  if (import.meta.env.PROD && !isSupabaseConfigured()) {
+    return (
+      <div className="min-h-dvh flex items-center justify-center bg-warmgray-50 px-4 py-12">
+        <div className="max-w-md w-full text-center bg-white p-8 rounded-2xl border border-red-100 shadow-xl page-enter">
+          <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <AlertTriangle className="w-8 h-8" />
+          </div>
+          <h1 className="text-xl font-bold text-warmgray-900 mb-2">
+            Configuration Required
+          </h1>
+          <p className="text-sm text-warmgray-500 mb-6">
+            CareCard is deployed in production mode, but could not connect to the database. The Supabase environment variables are missing on Vercel.
+          </p>
+          <div className="bg-warmgray-50 rounded-xl p-4 text-left space-y-3 border border-warmgray-100 text-xs text-warmgray-600 mb-6 font-mono">
+            <div className="flex items-center gap-2 text-warmgray-700 font-semibold mb-1">
+              <KeyRound className="w-4 h-4 text-brand-500" />
+              Required Variables:
+            </div>
+            <div>VITE_SUPABASE_URL</div>
+            <div>VITE_SUPABASE_ANON_KEY</div>
+          </div>
+          <a
+            href="https://vercel.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary w-full inline-block py-2.5"
+          >
+            Configure on Vercel
+          </a>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col min-h-dvh">
+
       {!isScanPage && <Header />}
       
       <main className="flex-1">

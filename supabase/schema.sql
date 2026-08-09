@@ -79,27 +79,26 @@ ALTER TABLE scan_logs ENABLE ROW LEVEL SECURITY;
 
 -- ======== CARE CARDS ========
 
--- Caregivers can read their own cards
+-- Caregivers can manage their own cards
 CREATE POLICY "Caregivers can read own cards"
   ON care_cards FOR SELECT
   USING (auth.uid() = caregiver_id);
 
--- Caregivers can create their own cards
 CREATE POLICY "Caregivers can create own cards"
   ON care_cards FOR INSERT
   WITH CHECK (auth.uid() = caregiver_id);
 
--- Caregivers can update their own cards
 CREATE POLICY "Caregivers can update own cards"
   ON care_cards FOR UPDATE
   USING (auth.uid() = caregiver_id)
   WITH CHECK (auth.uid() = caregiver_id);
 
--- Public can read active cards by token (limited fields enforced at application layer)
--- This allows the scan page to work without authentication
-CREATE POLICY "Public can read active cards by token"
-  ON care_cards FOR SELECT
-  USING (status = 'active');
+CREATE POLICY "Caregivers can delete own cards"
+  ON care_cards FOR DELETE
+  USING (auth.uid() = caregiver_id);
+
+-- NOTE: Direct SELECT on care_cards is disabled for public (anon) roles.
+-- Public scan retrieval is routed securely through RPC (get_public_profile).
 
 -- ======== TRUSTED CONTACTS ========
 
@@ -108,9 +107,17 @@ CREATE POLICY "Caregivers can read own contacts"
   ON trusted_contacts FOR SELECT
   USING (auth.uid() = caregiver_id);
 
+-- Secure contact creation: ensure caregiver owns the target card
 CREATE POLICY "Caregivers can create own contacts"
   ON trusted_contacts FOR INSERT
-  WITH CHECK (auth.uid() = caregiver_id);
+  WITH CHECK (
+    auth.uid() = caregiver_id AND
+    EXISTS (
+      SELECT 1 FROM care_cards
+      WHERE care_cards.id = card_id
+      AND care_cards.caregiver_id = auth.uid()
+    )
+  );
 
 CREATE POLICY "Caregivers can update own contacts"
   ON trusted_contacts FOR UPDATE
@@ -120,24 +127,10 @@ CREATE POLICY "Caregivers can delete own contacts"
   ON trusted_contacts FOR DELETE
   USING (auth.uid() = caregiver_id);
 
--- Public can read contacts for active cards (for contact action on scan page)
--- NOTE: In production, this should go through an Edge Function to avoid exposing raw contact data
-CREATE POLICY "Public can read contacts for active cards"
-  ON trusted_contacts FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM care_cards 
-      WHERE care_cards.id = trusted_contacts.card_id 
-      AND care_cards.status = 'active'
-    )
-  );
+-- NOTE: Direct SELECT on trusted_contacts is disabled for public (anon) roles.
+-- Public contact retrieval is routed securely through RPC (get_public_contacts).
 
 -- ======== SCAN LOGS ========
-
--- Anyone can insert scan logs
-CREATE POLICY "Anyone can create scan logs"
-  ON scan_logs FOR INSERT
-  WITH CHECK (true);
 
 -- Caregivers can read scan logs for their own cards
 CREATE POLICY "Caregivers can read own card scan logs"
@@ -150,8 +143,11 @@ CREATE POLICY "Caregivers can read own card scan logs"
     )
   );
 
+-- NOTE: Direct INSERT on scan_logs is disabled for public (anon) roles.
+-- Public scan logging is routed securely through RPC (log_card_scan).
+
 -- ============================================
--- 5. Updated_at trigger
+-- 5. Updated_at Trigger
 -- ============================================
 CREATE OR REPLACE FUNCTION update_updated_at()
 RETURNS TRIGGER AS $$
@@ -165,3 +161,114 @@ CREATE TRIGGER care_cards_updated_at
   BEFORE UPDATE ON care_cards
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at();
+
+-- ============================================
+-- 6. Secure Server-Side RPC Functions
+-- ============================================
+
+-- A. Secure Public Profile Retrieval
+-- Server-side projection: only outputs enabled fields and never exposes caregiver_id or tokens.
+CREATE OR REPLACE FUNCTION public.get_public_profile(p_token text)
+RETURNS TABLE (
+  display_name text,
+  preferred_language text,
+  accessibility_info text,
+  approximate_area text,
+  custom_instructions text,
+  status text
+) 
+SECURITY DEFINER
+SET search_path = public
+LANGUAGE plpgsql AS $$
+BEGIN
+  RETURN QUERY
+  SELECT 
+    CASE WHEN show_display_name THEN cc.display_name ELSE NULL END,
+    CASE WHEN show_language THEN cc.preferred_language ELSE NULL END,
+    CASE WHEN show_accessibility THEN cc.accessibility_info ELSE NULL END,
+    CASE WHEN show_area THEN cc.approximate_area ELSE NULL END,
+    CASE WHEN show_instructions THEN cc.custom_instructions ELSE NULL END,
+    cc.status
+  FROM care_cards cc
+  WHERE cc.public_token = p_token AND cc.status = 'active'
+  LIMIT 1;
+END;
+$$;
+
+-- B. Secure Public Contacts Retrieval
+-- Only exposes contacts if the card is active and the secure public_token matches.
+CREATE OR REPLACE FUNCTION public.get_public_contacts(p_token text)
+RETURNS TABLE (
+  contact_name text,
+  relationship text,
+  contact_method text,
+  contact_value text,
+  is_primary boolean
+) 
+SECURITY DEFINER
+SET search_path = public
+LANGUAGE plpgsql AS $$
+BEGIN
+  RETURN QUERY
+  SELECT 
+    tc.contact_name,
+    tc.relationship,
+    tc.contact_method,
+    tc.contact_value,
+    tc.is_primary
+  FROM trusted_contacts tc
+  JOIN care_cards cc ON cc.id = tc.card_id
+  WHERE cc.public_token = p_token AND cc.status = 'active'
+  ORDER BY tc.is_primary DESC;
+END;
+$$;
+
+-- C. Secure Scan Logger
+-- Sanitizes inputs, confirms the card exists and is active, and writes the log.
+CREATE OR REPLACE FUNCTION public.log_card_scan(p_token text)
+RETURNS void 
+SECURITY DEFINER
+SET search_path = public
+LANGUAGE plpgsql AS $$
+DECLARE
+  v_card_id UUID;
+BEGIN
+  SELECT id INTO v_card_id 
+  FROM care_cards 
+  WHERE public_token = p_token AND status = 'active';
+  
+  IF v_card_id IS NOT NULL THEN
+    INSERT INTO scan_logs (card_id) VALUES (v_card_id);
+  END IF;
+END;
+$$;
+
+
+-- D. Cascading Account Deletion
+-- Allows authenticated users to trigger deletion of their profile which cascades to all tables.
+CREATE OR REPLACE FUNCTION public.delete_user_account()
+RETURNS void 
+SECURITY DEFINER
+SET search_path = public
+LANGUAGE plpgsql AS $$
+DECLARE
+  v_user_id UUID;
+BEGIN
+  v_user_id := auth.uid();
+  IF v_user_id IS NULL THEN
+    RAISE EXCEPTION 'Not authenticated';
+  END IF;
+  
+  -- Cascading deletes will trigger on care_cards, trusted_contacts, and scan_logs
+  DELETE FROM auth.users WHERE id = v_user_id;
+END;
+$$;
+
+-- --------------------------------------------
+-- 7. Grant execution permissions
+-- --------------------------------------------
+GRANT EXECUTE ON FUNCTION public.get_public_profile(text) TO anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.get_public_contacts(text) TO anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.log_card_scan(text) TO anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.delete_user_account() TO authenticated;
+REVOKE EXECUTE ON FUNCTION public.delete_user_account() FROM anon, public;

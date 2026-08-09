@@ -183,23 +183,21 @@ export async function getPublicProfile(token: string): Promise<PublicCardProfile
     }
   }
 
-  // Use a database function or view to return only public fields
+  // Use the secure RPC function to get the profile without exposing other table rows or show_* flags
   const { data, error } = await supabase
-    .from('care_cards')
-    .select('display_name, preferred_language, accessibility_info, approximate_area, custom_instructions, status, public_token, show_display_name, show_language, show_accessibility, show_area, show_instructions')
-    .eq('public_token', token)
-    .single()
+    .rpc('get_public_profile', { p_token: token })
 
-  if (error || !data) return null
+  if (error || !data || data.length === 0) return null
 
+  const record = data[0]
   return {
-    display_name: data.show_display_name ? data.display_name : null,
-    preferred_language: data.show_language ? data.preferred_language : null,
-    accessibility_info: data.show_accessibility ? data.accessibility_info : null,
-    approximate_area: data.show_area ? data.approximate_area : null,
-    custom_instructions: data.show_instructions ? data.custom_instructions : null,
-    status: data.status,
-    card_id_short: data.public_token.substring(0, 8).toUpperCase(),
+    display_name: record.display_name,
+    preferred_language: record.preferred_language,
+    accessibility_info: record.accessibility_info,
+    approximate_area: record.approximate_area,
+    custom_instructions: record.custom_instructions,
+    status: record.status,
+    card_id_short: token.substring(0, 8).toUpperCase(),
   }
 }
 
@@ -282,21 +280,9 @@ export async function getPublicContacts(token: string): Promise<{ contact_name: 
     return demoContacts.getPublicContacts(card.id)
   }
 
-  // Get card by token first, then get contacts
-  const { data: card } = await supabase
-    .from('care_cards')
-    .select('id')
-    .eq('public_token', token)
-    .eq('status', 'active')
-    .single()
-
-  if (!card) return []
-
+  // Use the secure RPC function to fetch contacts without exposing raw tables to public SELECTs
   const { data, error } = await supabase
-    .from('trusted_contacts')
-    .select('contact_name, relationship, contact_method, contact_value, is_primary')
-    .eq('card_id', card.id)
-    .order('is_primary', { ascending: false })
+    .rpc('get_public_contacts', { p_token: token })
 
   if (error) return []
   return data || []
@@ -315,17 +301,8 @@ export async function logScan(token: string): Promise<void> {
     return
   }
 
-  const { data: card } = await supabase
-    .from('care_cards')
-    .select('id')
-    .eq('public_token', token)
-    .single()
-
-  if (card) {
-    await supabase.from('scan_logs').insert({
-      card_id: card.id,
-    })
-  }
+  // Use the secure RPC scan logger
+  await supabase.rpc('log_card_scan', { p_token: token })
 }
 
 export async function getScanLogs(cardId: string): Promise<ScanLog[]> {
@@ -343,3 +320,18 @@ export async function getScanLogs(cardId: string): Promise<ScanLog[]> {
   if (error) return []
   return data || []
 }
+
+// ========================================
+// Account Deletion
+// ========================================
+
+export async function deleteUserAccount(caregiverId: string): Promise<boolean> {
+  if (!useSupabase()) {
+    // In demo mode, sign out handles clean slate
+    return true
+  }
+
+  const { error } = await supabase.rpc('delete_user_account')
+  return !error
+}
+

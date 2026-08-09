@@ -16,10 +16,8 @@ export const supabase = createClient(
 )
 
 export const isSupabaseConfigured = (): boolean => {
-  // In production builds, we strictly use Supabase and disable demo mode.
-  if (import.meta.env.PROD) {
-    return true
-  }
-  return !!(supabaseUrl && supabaseAnonKey && 
-    supabaseUrl !== 'https://placeholder.supabase.co')
+  const hasValidUrl = supabaseUrl && supabaseUrl !== 'https://placeholder.supabase.co'
+  const hasValidKey = supabaseAnonKey && supabaseAnonKey !== 'placeholder-key'
+  return !!(hasValidUrl && hasValidKey)
 }
+
