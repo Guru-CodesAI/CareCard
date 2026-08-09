@@ -171,7 +171,7 @@ CONTACT TRUSTED PERSON → OPTIONAL LANGUAGE HELP → FAMILY RECONNECTS
 
 ### Privacy Controls
 - Each field has an individual public/private toggle
-- Private data (raw contact values, phone numbers, emails, addresses) is never returned or exposed to public endpoints or browser network logs
+- Raw trusted-contact phone numbers and email addresses are not returned by public contact RPCs. Contact actions are currently demonstrated through a frontend MVP flow; a production deployment should use a server-side contact relay.
 - Privacy-by-default: most sensitive fields start as hidden
 
 ### Input Security

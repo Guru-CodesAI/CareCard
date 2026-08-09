@@ -5,16 +5,14 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 const isDemo = import.meta.env.VITE_DEMO_MODE === 'true'
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  if (isDemo) {
-    console.warn(
-      'Supabase credentials not found. Running in SECURE DEMO mode (VITE_DEMO_MODE=true).'
-    )
-  } else {
-    console.error(
-      'CRITICAL: Supabase credentials missing in production/non-demo environment!'
-    )
-  }
+if (!isDemo && (!supabaseUrl || !supabaseAnonKey)) {
+  throw new Error('CRITICAL: Production Supabase configuration is missing.')
+}
+
+if (isDemo && (!supabaseUrl || !supabaseAnonKey)) {
+  console.warn(
+    'Supabase credentials not found. Running in SECURE DEMO mode (VITE_DEMO_MODE=true).'
+  )
 }
 
 export const supabase = createClient(
