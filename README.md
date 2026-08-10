@@ -203,5 +203,5 @@ Follow this workflow to test the entire application:
 
 ---
 
-Built with 🤍 for **Hack Devengers 1.0** 🚀
+Built with 🤍 by **GURUNATHAN V** 🚀
 
