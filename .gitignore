@@ -11,3 +11,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# Helper and local developer scripts
+copy-og-image.bat
+clean_repo.bat
+git_push.ps1
