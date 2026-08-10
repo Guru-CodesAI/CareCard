@@ -36,9 +36,14 @@ export function Footer() {
           </nav>
         </div>
 
-        <p className="mt-4 text-xs text-warmgray-400 text-center sm:text-left">
-          CareCard is a communication aid and does not replace emergency services.
-          If someone is in immediate danger, contact the appropriate local emergency service.
+        <p className="mt-4 text-xs text-warmgray-400 text-center sm:text-left flex flex-col sm:flex-row sm:justify-between items-center gap-2 border-t border-warmgray-150/50 pt-4">
+          <span>
+            CareCard is a communication aid and does not replace emergency services.
+            If someone is in immediate danger, contact the appropriate local emergency service.
+          </span>
+          <span className="shrink-0 text-warmgray-500 font-medium mt-1 sm:mt-0">
+            Developed by <span className="text-warmgray-700 font-semibold">Gurunathan V</span>
+          </span>
         </p>
       </div>
     </footer>
