@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom'
 import { Heart, Shield, Sparkles, CheckCircle, ArrowLeft, ShieldAlert } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 export function ForChildrenPage() {
   return (
     <div className="page-container page-enter">
+      <SEO
+        title="QR Emergency ID Card for Children | CareCard"
+        description="CareCard provides a simple QR assistance card that helps children reconnect with caregivers when they need help."
+        path="/for-children"
+      />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
         <ArrowLeft className="w-4 h-4" />
         Back

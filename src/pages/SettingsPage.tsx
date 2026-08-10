@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { deleteUserAccount } from '@/lib/data'
 import { Settings, User, Shield, LogOut, AlertCircle, CheckCircle, Heart, X } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 export function SettingsPage() {
   const { user, signOut, isDemo } = useAuth()
@@ -38,6 +39,12 @@ export function SettingsPage() {
 
   return (
     <div className="page-container page-enter">
+      <SEO
+        title="Settings | CareCard"
+        description="Manage your account settings on CareCard."
+        path="/settings"
+        noindex
+      />
       <h1 className="page-header mb-8 flex items-center gap-2">
         <Settings className="w-7 h-7 text-brand-500" />
         Settings

@@ -7,6 +7,7 @@ import { CareCard } from '@/types'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import QRCode from 'qrcode'
 import { Printer, ArrowLeft, Heart } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 export function PrintCardPage() {
   const { id } = useParams<{ id: string }>()
@@ -54,6 +55,12 @@ export function PrintCardPage() {
 
   return (
     <>
+      <SEO
+        title={`Print CareCard: ${card.display_name} | CareCard`}
+        description="Print CareCard emergency ID card for carrying in wallet, pouch, lanyard or pocket."
+        path={`/print/${id}`}
+        noindex
+      />
       {/* Screen controls */}
       <div className="page-container no-print">
         <Link to={`/card/${card.id}`} className="btn-ghost mb-4 -ml-2">

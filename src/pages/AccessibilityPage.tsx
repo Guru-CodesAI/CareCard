@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom'
 import { Heart, Globe, Type, Eye, CheckCircle, ArrowLeft } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 export function AccessibilityPage() {
   return (
     <div className="page-container page-enter">
+      <SEO
+        title="Accessible QR Assistance Card | CareCard"
+        description="Explore CareCard's accessibility and multilingual assistance features designed for people who may need help communicating."
+        path="/accessibility"
+      />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
         <ArrowLeft className="w-4 h-4" />
         Back

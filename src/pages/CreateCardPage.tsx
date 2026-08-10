@@ -10,6 +10,7 @@ import {
   Phone, Mail, User, Users, Shield, AlertCircle,
   CheckCircle, Plus, Trash2
 } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 interface ContactEntry {
   contact_name: string
@@ -151,6 +152,12 @@ export function CreateCardPage() {
 
   return (
     <div className="page-container page-enter">
+      <SEO
+        title="Create CareCard | CareCard"
+        description="Create a new privacy-first QR safety emergency contact profile."
+        path="/create"
+        noindex
+      />
       {/* Progress */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">

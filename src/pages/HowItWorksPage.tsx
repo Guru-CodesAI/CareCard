@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom'
 import { QrCode, Printer, Scan, Eye, Heart, ArrowLeft, ArrowRight, UserPlus } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 export function HowItWorksPage() {
   return (
     <div className="page-container page-enter">
+      <SEO
+        title="How CareCard Works — Privacy-First QR Assistance"
+        description="Learn how CareCard uses a privacy-first QR card to help people share essential assistance information and reconnect with trusted contacts."
+        path="/how-it-works"
+      />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
         <ArrowLeft className="w-4 h-4" />
         Back

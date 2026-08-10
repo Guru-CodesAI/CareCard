@@ -4,12 +4,21 @@ import {
   ArrowRight, Globe, Eye, Lock, ChevronRight, Cpu, Server
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import { SEO } from '@/components/SEO'
+import { CareCardSchema, CareCardOrganizationSchema } from '@/components/CareCardSchema'
 
 export function LandingPage() {
   const { user } = useAuth()
 
   return (
     <div className="page-enter">
+      <SEO
+        title="CareCard — Privacy-First QR Emergency Contact Card"
+        description="CareCard is a privacy-first QR emergency contact card that helps elderly people, children, and individuals who need assistance reconnect with trusted contacts."
+        path="/"
+      />
+      <CareCardSchema />
+      <CareCardOrganizationSchema />
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         {/* Subtle warm gradient background */}

@@ -16,3 +16,5 @@ pnpm-debug.log*
 copy-og-image.bat
 clean_repo.bat
 git_push.ps1
+*.tsbuildinfo
+

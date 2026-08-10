@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom'
 import { Heart, Shield, Phone, Sparkles, CheckCircle, ArrowLeft } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 export function ForElderlyPage() {
   return (
     <div className="page-container page-enter">
+      <SEO
+        title="QR Safety Card for Elderly People | CareCard"
+        description="Learn how CareCard provides a simple QR safety and assistance card for elderly people who may need help communicating with strangers."
+        path="/for-elderly"
+      />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
         <ArrowLeft className="w-4 h-4" />
         Back

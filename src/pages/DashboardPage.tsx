@@ -10,6 +10,7 @@ import {
   Plus, QrCode, Printer, Eye, Edit, Heart, 
   MoreVertical, Shield
 } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 export function DashboardPage() {
   const { user } = useAuth()
@@ -38,6 +39,12 @@ export function DashboardPage() {
 
   return (
     <div className="page-container page-enter">
+      <SEO
+        title="Dashboard | CareCard"
+        description="Manage your CareCards emergency contact profiles."
+        path="/dashboard"
+        noindex
+      />
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>

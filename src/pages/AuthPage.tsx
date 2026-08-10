@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { Heart, Mail, Lock, User, Eye, EyeOff, ArrowRight, AlertCircle } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 export function AuthPage() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signup')
@@ -50,6 +51,12 @@ export function AuthPage() {
 
   return (
     <div className="page-enter min-h-[calc(100dvh-4rem)] flex items-center justify-center py-8 px-4">
+      <SEO
+        title="Sign In / Sign Up | CareCard"
+        description="Manage your privacy-first QR safety emergency contact profiles on CareCard."
+        path="/auth"
+        noindex
+      />
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">

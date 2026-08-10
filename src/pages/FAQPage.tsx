@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { HelpCircle, ChevronRight, AlertTriangle, ArrowLeft } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 export function FAQPage() {
   const faqs = [
@@ -35,6 +36,11 @@ export function FAQPage() {
 
   return (
     <div className="page-container page-enter">
+      <SEO
+        title="CareCard FAQ — QR Emergency Contact Card Questions"
+        description="Answers to common questions about CareCard, QR emergency contact cards, privacy, elderly safety, caregivers and assistance."
+        path="/faq"
+      />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
         <ArrowLeft className="w-4 h-4" />
         Back

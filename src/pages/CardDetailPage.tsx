@@ -13,6 +13,7 @@ import {
   CheckCircle, Copy, ExternalLink, Trash2, Plus, AlertCircle,
   Globe, Accessibility, ArrowLeft, Edit2, Save, X
 } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 export function CardDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -180,6 +181,12 @@ export function CardDetailPage() {
 
   return (
     <div className="page-container page-enter">
+      <SEO
+        title={`Card Details: ${card.display_name} | CareCard`}
+        description="Manage security, visibility, and trusted contacts for this CareCard."
+        path={`/card/${id}`}
+        noindex
+      />
       {/* Back */}
       <Link to="/dashboard" className="btn-ghost mb-4 -ml-2">
         <ArrowLeft className="w-4 h-4" />

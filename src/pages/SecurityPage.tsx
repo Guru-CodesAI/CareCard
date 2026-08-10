@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom'
 import { Shield, Lock, Cpu, EyeOff, Server, AlertTriangle, ArrowLeft } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 export function SecurityPage() {
   return (
     <div className="page-container page-enter">
+      <SEO
+        title="CareCard Security — QR Privacy, RLS & PostgreSQL"
+        description="Explore CareCard's security architecture including QR token protection, Supabase Row Level Security, PostgreSQL policies, triggers and rate limiting."
+        path="/security"
+      />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
         <ArrowLeft className="w-4 h-4" />
         Back

@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom'
 import { Shield, Lock, Eye, Database, Trash2, Heart, ArrowLeft } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 export function PrivacyPage() {
   return (
     <div className="page-container page-enter">
+      <SEO
+        title="CareCard Privacy — Privacy-First QR Assistance"
+        description="Learn how CareCard minimizes personal information exposure through QR token design, privacy controls and controlled public profiles."
+        path="/privacy"
+      />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
         <ArrowLeft className="w-4 h-4" />
         Back

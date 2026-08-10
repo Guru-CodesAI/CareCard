@@ -9,6 +9,7 @@ import {
   MessageSquare, AlertTriangle, ShieldCheck, Shield,
   ChevronDown, ChevronUp, Info, ExternalLink
 } from 'lucide-react'
+import { SEO } from '@/components/SEO'
 
 // Client-side rate limiter
 const scanRateLimiter = new RateLimiter(10, 60000) // 10 requests per minute
@@ -199,6 +200,12 @@ export function ScanPage() {
 
   return (
     <div className="min-h-dvh bg-warmgray-50">
+      <SEO
+        title={`CareCard Assistance Profile — ${profile.display_name || 'Active Card'}`}
+        description="CareCard privacy-first emergency contact assistance profile."
+        path={`/scan/${token}`}
+        noindex
+      />
       {/* Header */}
       <div className="bg-white border-b border-warmgray-200 px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center justify-between">
