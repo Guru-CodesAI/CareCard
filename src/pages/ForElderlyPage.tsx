@@ -1,0 +1,90 @@
+import { Link } from 'react-router-dom'
+import { Heart, Shield, Phone, Sparkles, CheckCircle, ArrowLeft } from 'lucide-react'
+
+export function ForElderlyPage() {
+  return (
+    <div className="page-container page-enter">
+      <Link to="/" className="btn-ghost mb-4 -ml-2">
+        <ArrowLeft className="w-4 h-4" />
+        Back
+      </Link>
+
+      <div className="mb-6">
+        <div className="flex items-center gap-2 text-xs font-semibold text-brand-600 uppercase tracking-wider mb-2">
+          👴 Senior Safety Solution
+        </div>
+        <h1 className="page-header mb-2 text-3xl">A Simple QR Safety Card for Elderly People</h1>
+        <p className="text-warmgray-500 text-sm">
+          Keep senior family members safe and connected with a privacy-first QR emergency contact card.
+        </p>
+      </div>
+
+      <div className="space-y-6">
+        <section className="card">
+          <h2 className="text-lg font-semibold text-warmgray-900 mb-3">Why Use a QR Card for Elderly Safety?</h2>
+          <p className="text-sm text-warmgray-600 leading-relaxed mb-4">
+            For elderly individuals living with cognitive decline, dementia, Alzheimer's, or communication impairments, a simple outing can present challenges. If they get lost or disoriented, they may struggle to remember or explain their home address or their family's phone numbers.
+          </p>
+          <p className="text-sm text-warmgray-600 leading-relaxed">
+            CareCard provides a physical, easy-to-carry emergency ID card that helpers can scan to immediately access caregiver contacts without exposing private phone numbers to the public eye.
+          </p>
+        </section>
+
+        <section className="card">
+          <h2 className="text-lg font-semibold text-warmgray-900 mb-4 flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-brand-500" />
+            Key Benefits for Seniors
+          </h2>
+          <div className="space-y-4">
+            <div className="flex gap-3">
+              <CheckCircle className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-warmgray-800 text-sm">No Tech Skills Required for the Senior</h3>
+                <p className="text-xs text-warmgray-500 mt-1">
+                  The elderly cardholder only needs to carry a physical printed card in their wallet, pocket, or attached to a keychain/lanyard. No smartphone, app setup, or internet usage is required on their part.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <CheckCircle className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-warmgray-800 text-sm">Multilingual Communication Assistance</h3>
+                <p className="text-xs text-warmgray-500 mt-1">
+                  Set their primary spoken languages (e.g., Tamil, Hindi, English). If a helper scans the card, the interface displays instructions in the languages the senior feels most comfortable communicating in.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <CheckCircle className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-warmgray-800 text-sm">Opaque Privacy Safeguards</h3>
+                <p className="text-xs text-warmgray-500 mt-1">
+                  Unlike traditional medical bracelets or custom IDs that print family phone numbers in plain view of strangers, CareCard uses secure QR tokens. Phone numbers are hidden until a verified helper interacts with the page, keeping the senior's family safe from unwanted solicitation.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="card bg-warmgray-50">
+          <h2 className="text-lg font-semibold text-warmgray-900 mb-3 flex items-center gap-2">
+            <Shield className="w-5 h-5 text-brand-500" />
+            Privacy & Peace of Mind
+          </h2>
+          <p className="text-sm text-warmgray-600 leading-relaxed">
+            As a caregiver, you maintain absolute control over the information. If contact details change, you can update them dynamically in the online dashboard. There is no need to reprint the physical QR card; the printed code remains active and links to the updated information automatically.
+          </p>
+        </section>
+
+        <div className="text-center py-4">
+          <Link to="/auth" className="btn-primary">
+            <Heart className="w-4 h-4" fill="white" />
+            Create Senior Safety Card
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}

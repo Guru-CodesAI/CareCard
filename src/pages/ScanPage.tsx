@@ -43,6 +43,18 @@ export function ScanPage() {
   const t = SCAN_PAGE_TRANSLATIONS[lang] || SCAN_PAGE_TRANSLATIONS.en
 
   useEffect(() => {
+    // Prevent search engine indexing of dynamic profile scan pages
+    const meta = document.createElement('meta')
+    meta.name = 'robots'
+    meta.content = 'noindex, nofollow'
+    document.head.appendChild(meta)
+
+    return () => {
+      document.head.removeChild(meta)
+    }
+  }, [])
+
+  useEffect(() => {
     if (!token) return
     loadProfile()
   }, [token])

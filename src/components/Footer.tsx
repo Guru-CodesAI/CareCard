@@ -23,9 +23,16 @@ export function Footer() {
             <span className="text-xs text-warmgray-400">— A small card. A safer connection.</span>
           </div>
 
-          <nav className="flex items-center gap-4 text-sm text-warmgray-500" aria-label="Footer navigation">
-            <Link to="/privacy" className="hover:text-warmgray-700 transition-colors">Privacy</Link>
-            <Link to="/help" className="hover:text-warmgray-700 transition-colors">Help</Link>
+          <nav className="flex flex-wrap items-center justify-center sm:justify-end gap-x-4 gap-y-2 text-xs sm:text-sm text-warmgray-500" aria-label="Footer navigation">
+            <Link to="/how-it-works" className="hover:text-brand-500 transition-colors">How It Works</Link>
+            <Link to="/for-elderly" className="hover:text-brand-500 transition-colors">For Elderly</Link>
+            <Link to="/for-children" className="hover:text-brand-500 transition-colors">For Children</Link>
+            <Link to="/for-caregivers" className="hover:text-brand-500 transition-colors">For Caregivers</Link>
+            <Link to="/accessibility" className="hover:text-brand-500 transition-colors">Accessibility</Link>
+            <Link to="/security" className="hover:text-brand-500 transition-colors">Security</Link>
+            <Link to="/privacy" className="hover:text-brand-500 transition-colors">Privacy</Link>
+            <Link to="/faq" className="hover:text-brand-500 transition-colors">FAQ</Link>
+            <Link to="/help" className="hover:text-brand-500 transition-colors">Help</Link>
           </nav>
         </div>
 

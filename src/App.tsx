@@ -17,6 +17,13 @@ import { PrintCardPage } from '@/pages/PrintCardPage'
 import { SettingsPage } from '@/pages/SettingsPage'
 import { PrivacyPage } from '@/pages/PrivacyPage'
 import { HelpPage } from '@/pages/HelpPage'
+import { SecurityPage } from '@/pages/SecurityPage'
+import { HowItWorksPage } from '@/pages/HowItWorksPage'
+import { ForElderlyPage } from '@/pages/ForElderlyPage'
+import { ForChildrenPage } from '@/pages/ForChildrenPage'
+import { ForCaregiversPage } from '@/pages/ForCaregiversPage'
+import { AccessibilityPage } from '@/pages/AccessibilityPage'
+import { FAQPage } from '@/pages/FAQPage'
 
 
 // Protected route wrapper
@@ -107,6 +114,13 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/scan/:token" element={<ScanPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/security" element={<SecurityPage />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
+          <Route path="/for-elderly" element={<ForElderlyPage />} />
+          <Route path="/for-children" element={<ForChildrenPage />} />
+          <Route path="/for-caregivers" element={<ForCaregiversPage />} />
+          <Route path="/accessibility" element={<AccessibilityPage />} />
+          <Route path="/faq" element={<FAQPage />} />
           <Route path="/help" element={<HelpPage />} />
 
           {/* Guest-only route */}

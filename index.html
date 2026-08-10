@@ -4,12 +4,107 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/carecard.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <meta name="description" content="CareCard — A privacy-first digital assistance card that helps people safely reconnect vulnerable individuals with trusted contacts." />
+    <title>CareCard — Privacy-First QR Emergency Contact Card</title>
+    <meta name="description" content="CareCard is a privacy-first QR emergency contact card that helps elderly people, children, and vulnerable individuals reconnect with trusted contacts safely." />
     <meta name="theme-color" content="#ee7a0e" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://care-card-three.vercel.app/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="CareCard — A Small Card. A Safer Connection." />
+    <meta property="og:description" content="A privacy-first QR assistance system designed to help vulnerable individuals reconnect with trusted contacts safely." />
+    <meta property="og:url" content="https://care-card-three.vercel.app/" />
+    <meta property="og:image" content="https://care-card-three.vercel.app/og-image.png" />
+    <meta property="og:image:alt" content="CareCard privacy-first QR assistance card" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="CareCard — Privacy-First QR Emergency Contact Card" />
+    <meta name="twitter:description" content="A small QR card designed to help vulnerable individuals reconnect with trusted contacts safely." />
+    <meta name="twitter:image" content="https://care-card-three.vercel.app/og-image.png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
-    <title>CareCard — A small card that can make a big difference</title>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "CareCard",
+      "url": "https://care-card-three.vercel.app/",
+      "description": "Privacy-first QR assistance system for helping vulnerable individuals reconnect with trusted contacts.",
+      "applicationCategory": "SafetyApplication",
+      "operatingSystem": "Web"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a QR emergency contact card?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "CareCard is a physical QR card connected to a privacy-controlled digital assistance profile."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does a QR emergency contact card work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A caregiver creates a CareCard, prints its QR code, and the card holder carries it. A helper can scan the QR code to view permitted assistance information."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is CareCard designed for elderly people?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. CareCard is designed for elderly people, children, travelers, and individuals who may have difficulty communicating during situations where assistance is needed."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the QR code contain my phone number?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. CareCard uses an opaque cryptographically generated token instead of storing personal information directly in the QR code."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does the helper need the CareCard app?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The helper can access the public assistance view through a web browser."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I deactivate my CareCard?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. A caregiver can deactivate the card and regenerate its QR token."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is CareCard an emergency service?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. CareCard is a communication and assistance aid and does not replace emergency services."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -2,7 +2,7 @@
 
 # 🎴 CareCard
 
-### **A small card. A safer connection.**
+### **Privacy-First QR Emergency Contact Card — A small card. A safer connection.**
 
 [![Security Verification](https://img.shields.io/badge/Security-Hardened-success?style=for-the-badge&logo=securityscorecard&logoColor=white)](https://github.com/Guru-CodesAI/CareCard)
 [![Database](https://img.shields.io/badge/Database-Supabase%20%2B%20Postgres-blue?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
@@ -10,16 +10,24 @@
 [![Deployment](https://img.shields.io/badge/Deployed-Vercel-black?style=for-the-badge&logo=vercel&logoColor=white)](https://care-card-three.vercel.app)
 
 <p align="center" style="max-width: 600px; font-size: 1.1rem; line-height: 1.6; color: #4B5563;">
-  <strong>CareCard is a privacy-first digital assistance ecosystem.</strong> Designed to reconnect vulnerable individuals—like the elderly, children, or those with accessibility needs—with their caregivers safely and securely.
+  <strong>CareCard is an open-source, privacy-first QR emergency contact card and safety assistance ecosystem.</strong> It enables caregivers to create secure physical QR cards that reconnect vulnerable individuals—such as elderly citizens, children, and people with accessibility needs—with their families safely and without exposing private personal details.
 </p>
 
 *“If I can’t explain who I am, my CareCard can help.”*
 
 ---
 
-[✨ Key Features](#-key-features) • [🛡️ Security Model](#-security-model) • [🏗️ Architecture](#%EF%B8%8F-architecture) • [🚀 Quick Start](#-quick-start) • [🎮 Demo Flow](#-demo-flow)
+[✨ Key Features](#-key-features) • [🛡️ Security Model](#-security-model) • [🏗️ Technical SEO & Architecture](#-technical-seo--architecture) • [🚀 Quick Start](#-quick-start) • [🎮 Demo Flow](#-demo-flow)
 
 </div>
+
+---
+
+## 🎯 Target SEO & Discoverability Cluster
+For developers, recruiters, and search indexers, CareCard is optimized around the following keywords:
+* **Primary:** `privacy-first QR emergency contact card`
+* **Secondary:** `senior citizen safety card`, `digital emergency contact card`, `QR safety card`, `elderly emergency QR card`, `accessibility safety assistance`
+* **GitHub Topics:** `react`, `typescript`, `supabase`, `postgres-rls`, `emergency-card`, `privacy-by-design`, `qr-code-generator`, `seo-optimization`, `structured-data-json-ld`, `accessibility-tools`
 
 ---
 
@@ -57,10 +65,17 @@ CareCard bridges this gap by combining **physical simplicity with digital privac
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Technical SEO & Architecture
 
-CareCard is built using a highly decoupled serverless model:
+CareCard features a production-ready SEO architecture designed to crawl public marketing assets while protecting private user profiles.
 
+### 🚀 Search Discovery & Page Optimization
+* **JSON-LD Structured Data:** Embeds microdata schemas for both `WebApplication` (defining product utility) and `FAQPage` (matching direct user queries).
+* **Canonical Targeting:** Employs `<link rel="canonical" />` tags to enforce single-domain indexing across landing pages.
+* **Crawler Privacy Safeguards:** Dynamic profile pages (`/scan/:token`) execute client-side mount hooks that inject `<meta name="robots" content="noindex, nofollow" />`. This ensures personal profile pages are never harvested by crawlers.
+* **XML Sitemap & Robots.txt:** Configured via `public/sitemap.xml` and `public/robots.txt` to whitelist marketing entry points while blocking indexation of internal profile parameters.
+
+### ⚙️ Core Application Stack
 ```
                   ┌──────────────────────┐
                   │      React App       │
@@ -189,3 +204,4 @@ Follow this workflow to test the entire application:
 ---
 
 Built with 🤍 for **Hack Devengers 1.0** 🚀
+
