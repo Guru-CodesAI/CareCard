@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
-import { supabase, isSupabaseConfigured, isDemoModeActive } from '@/lib/supabase'
-import { demoAuth, initDemoData } from '@/lib/demoStore'
+import { supabase } from '@/lib/supabase'
 
 interface User {
   id: string
@@ -22,23 +21,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
-  const isDemo = isDemoModeActive()
+  const isDemo = false
 
   useEffect(() => {
-    if (isDemo) {
-      initDemoData()
-      const demoUser = demoAuth.getUser()
-      if (demoUser) {
-        setUser({
-          id: demoUser.id,
-          email: demoUser.email,
-          full_name: demoUser.full_name,
-        })
-      }
-      setLoading(false)
-      return
-    }
-
     // Supabase auth
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
@@ -64,19 +49,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
 
     return () => subscription.unsubscribe()
-  }, [isDemo])
+  }, [])
 
   const signUp = useCallback(async (email: string, password: string, fullName: string): Promise<{ error?: string }> => {
-    if (isDemo) {
-      const result = demoAuth.signUp(email, password, fullName)
-      if (result.error) return { error: result.error.message }
-      const demoUser = demoAuth.getUser()
-      if (demoUser) {
-        setUser({ id: demoUser.id, email: demoUser.email, full_name: demoUser.full_name })
-      }
-      return {}
-    }
-
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -86,33 +61,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
     if (error) return { error: error.message }
     return {}
-  }, [isDemo])
+  }, [])
 
   const signIn = useCallback(async (email: string, password: string): Promise<{ error?: string }> => {
-    if (isDemo) {
-      const result = demoAuth.signIn(email, password)
-      if (result.error) return { error: result.error.message }
-      const demoUser = demoAuth.getUser()
-      if (demoUser) {
-        setUser({ id: demoUser.id, email: demoUser.email, full_name: demoUser.full_name })
-      }
-      return {}
-    }
-
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) return { error: error.message }
     return {}
-  }, [isDemo])
+  }, [])
 
   const signOut = useCallback(async () => {
-    if (isDemo) {
-      demoAuth.signOut()
-      setUser(null)
-      return
-    }
     await supabase.auth.signOut()
     setUser(null)
-  }, [isDemo])
+  }, [])
 
   return (
     <AuthContext.Provider value={{ user, loading, isDemo, signUp, signIn, signOut }}>

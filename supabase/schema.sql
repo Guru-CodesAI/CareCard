@@ -294,6 +294,9 @@ BEGIN
     RETURN;
   END IF;
 
+  -- Obtain a transaction-level exclusive advisory lock on the card ID hash to prevent concurrent logging race conditions
+  PERFORM pg_advisory_xact_lock(hashtext(v_card_id::text));
+
   -- Server-side rate limit: max 20 scans per minute per card to prevent log flooding
   SELECT COUNT(*) INTO v_recent_count
   FROM scan_logs

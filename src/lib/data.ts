@@ -1,24 +1,16 @@
 /**
- * Data access layer for CareCard.
- * Transparently uses Supabase or demo store based on configuration.
+ * Data access layer for CareCard (Production-only Supabase integration).
  */
 
-import { supabase, isSupabaseConfigured } from '@/lib/supabase'
-import { demoCards, demoContacts, demoScanLogs } from '@/lib/demoStore'
+import { supabase } from '@/lib/supabase'
 import { CareCard, TrustedContact, ScanLog, PublicCardProfile } from '@/types'
 import { generateSecureToken, sanitizeInput } from '@/lib/utils'
-
-const useSupabase = isSupabaseConfigured
 
 // ========================================
 // CareCards
 // ========================================
 
 export async function getCards(caregiverId: string): Promise<CareCard[]> {
-  if (!useSupabase()) {
-    return demoCards.getAll(caregiverId)
-  }
-
   const { data, error } = await supabase
     .from('care_cards')
     .select('*')
@@ -30,10 +22,6 @@ export async function getCards(caregiverId: string): Promise<CareCard[]> {
 }
 
 export async function getCardById(id: string, caregiverId: string): Promise<CareCard | null> {
-  if (!useSupabase()) {
-    return demoCards.getById(id, caregiverId)
-  }
-
   const { data, error } = await supabase
     .from('care_cards')
     .select('*')
@@ -75,10 +63,6 @@ export async function createCard(
     show_trusted_contact: data.show_trusted_contact ?? true,
   }
 
-  if (!useSupabase()) {
-    return demoCards.create(sanitized as Partial<CareCard>, caregiverId)
-  }
-
   const token = generateSecureToken()
   const { data: card, error } = await supabase
     .from('care_cards')
@@ -110,10 +94,6 @@ export async function updateCard(
   if (sanitized.custom_instructions) sanitized.custom_instructions = sanitizeInput(sanitized.custom_instructions, 500)
   if (sanitized.approximate_area) sanitized.approximate_area = sanitizeInput(sanitized.approximate_area, 200)
 
-  if (!useSupabase()) {
-    return demoCards.update(id, sanitized, caregiverId)
-  }
-
   const { data, error } = await supabase
     .from('care_cards')
     .update({ ...sanitized, updated_at: new Date().toISOString() })
@@ -126,12 +106,7 @@ export async function updateCard(
   return data
 }
 
-
 export async function deactivateCard(id: string, caregiverId: string): Promise<boolean> {
-  if (!useSupabase()) {
-    return demoCards.deactivate(id, caregiverId)
-  }
-
   const { error } = await supabase
     .from('care_cards')
     .update({ status: 'deactivated', updated_at: new Date().toISOString() })
@@ -142,10 +117,6 @@ export async function deactivateCard(id: string, caregiverId: string): Promise<b
 }
 
 export async function activateCard(id: string, caregiverId: string): Promise<boolean> {
-  if (!useSupabase()) {
-    return demoCards.activate(id, caregiverId)
-  }
-
   const { error } = await supabase
     .from('care_cards')
     .update({ status: 'active', updated_at: new Date().toISOString() })
@@ -156,10 +127,6 @@ export async function activateCard(id: string, caregiverId: string): Promise<boo
 }
 
 export async function regenerateQR(id: string, caregiverId: string): Promise<string | null> {
-  if (!useSupabase()) {
-    return demoCards.regenerateToken(id, caregiverId)
-  }
-
   const newToken = generateSecureToken()
   const { error } = await supabase
     .from('care_cards')
@@ -175,20 +142,6 @@ export async function regenerateQR(id: string, caregiverId: string): Promise<str
 // ========================================
 
 export async function getPublicProfile(token: string): Promise<PublicCardProfile | null> {
-  if (!useSupabase()) {
-    const card = await demoCards.getByToken(token)
-    if (!card) return null
-    return {
-      display_name: card.show_display_name ? card.display_name : null,
-      preferred_language: card.show_language ? card.preferred_language : null,
-      accessibility_info: card.show_accessibility ? card.accessibility_info : null,
-      approximate_area: card.show_area ? card.approximate_area : null,
-      custom_instructions: card.show_instructions ? card.custom_instructions : null,
-      status: card.status,
-      card_id_short: card.public_token.substring(0, 8).toUpperCase(),
-    }
-  }
-
   // Use the secure RPC function to get the profile without exposing other table rows or show_* flags
   const { data, error } = await supabase
     .rpc('get_public_profile', { p_token: token })
@@ -212,10 +165,6 @@ export async function getPublicProfile(token: string): Promise<PublicCardProfile
 // ========================================
 
 export async function getContacts(cardId: string, caregiverId: string): Promise<TrustedContact[]> {
-  if (!useSupabase()) {
-    return demoContacts.getByCardId(cardId, caregiverId)
-  }
-
   const { data, error } = await supabase
     .from('trusted_contacts')
     .select('*')
@@ -246,10 +195,6 @@ export async function createContact(
     is_primary: data.is_primary,
   }
 
-  if (!useSupabase()) {
-    return demoContacts.create(sanitized, cardId, caregiverId)
-  }
-
   const { data: contact, error } = await supabase
     .from('trusted_contacts')
     .insert({
@@ -271,10 +216,6 @@ export async function updateContact(
   data: Partial<TrustedContact>,
   caregiverId: string
 ): Promise<TrustedContact | null> {
-  if (!useSupabase()) {
-    return demoContacts.update(id, data, caregiverId)
-  }
-
   const { data: updated, error } = await supabase
     .from('trusted_contacts')
     .update(data)
@@ -288,10 +229,6 @@ export async function updateContact(
 }
 
 export async function deleteContact(id: string, caregiverId: string): Promise<boolean> {
-  if (!useSupabase()) {
-    return demoContacts.delete(id, caregiverId)
-  }
-
   const { error } = await supabase
     .from('trusted_contacts')
     .delete()
@@ -302,12 +239,6 @@ export async function deleteContact(id: string, caregiverId: string): Promise<bo
 }
 
 export async function getPublicContacts(token: string): Promise<{ contact_name: string; relationship: string; contact_method: 'phone' | 'email'; is_primary: boolean }[]> {
-  if (!useSupabase()) {
-    const card = await demoCards.getByToken(token)
-    if (!card || card.status !== 'active') return []
-    return demoContacts.getPublicContacts(card.id)
-  }
-
   // Use the secure RPC function to fetch contacts without exposing raw tables to public SELECTs
   const { data, error } = await supabase
     .rpc('get_public_contacts', { p_token: token })
@@ -321,23 +252,11 @@ export async function getPublicContacts(token: string): Promise<{ contact_name: 
 // ========================================
 
 export async function logScan(token: string): Promise<void> {
-  if (!useSupabase()) {
-    const card = await demoCards.getByToken(token)
-    if (card) {
-      await demoScanLogs.log(card.id)
-    }
-    return
-  }
-
   // Use the secure RPC scan logger
   await supabase.rpc('log_card_scan', { p_token: token })
 }
 
 export async function getScanLogs(cardId: string): Promise<ScanLog[]> {
-  if (!useSupabase()) {
-    return demoScanLogs.getByCardId(cardId)
-  }
-
   const { data, error } = await supabase
     .from('scan_logs')
     .select('*')
@@ -354,12 +273,6 @@ export async function getScanLogs(cardId: string): Promise<ScanLog[]> {
 // ========================================
 
 export async function deleteUserAccount(caregiverId: string): Promise<boolean> {
-  if (!useSupabase()) {
-    // In demo mode, sign out handles clean slate
-    return true
-  }
-
   const { error } = await supabase.rpc('delete_user_account')
   return !error
 }
-

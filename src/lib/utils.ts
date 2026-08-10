@@ -88,20 +88,6 @@ export function getLanguageDisplay(code: string): { name: string; native: string
 }
 
 /**
- * Debounce utility
- */
-export function debounce<T extends (...args: unknown[]) => unknown>(
-  fn: T,
-  delay: number
-): (...args: Parameters<T>) => void {
-  let timeoutId: ReturnType<typeof setTimeout>
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeoutId)
-    timeoutId = setTimeout(() => fn(...args), delay)
-  }
-}
-
-/**
  * Simple rate limiter for client-side use
  */
 export class RateLimiter {
