@@ -11,6 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.0.0",
+    "@fontsource/outfit": "^5.0.0",
     "@supabase/supabase-js": "^2.45.0",
     "lucide-react": "^0.454.0",
     "qrcode": "^1.5.4",
