@@ -6,8 +6,8 @@ export function SecurityPage() {
   return (
     <div className="page-container page-enter">
       <SEO
-        title="CareCard Security — QR Privacy, RLS & PostgreSQL"
-        description="Explore CareCard's security architecture including QR token protection, Supabase Row Level Security, PostgreSQL policies, triggers and rate limiting."
+        title="Secure QR Emergency Card — RLS & Token Security | CareCard"
+        description="Explore the secure QR emergency card architecture. Built with Supabase RLS, secure QR tokens, PostgreSQL security policies, and rate limits."
         path="/security"
       />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
@@ -19,9 +19,9 @@ export function SecurityPage() {
         <div className="flex items-center gap-2 text-xs font-semibold text-brand-600 uppercase tracking-wider mb-2">
           <Shield className="w-4 h-4" /> Technical Architecture
         </div>
-        <h1 className="page-header mb-2">CareCard Security Model</h1>
+        <h1 className="page-header mb-2 text-3xl font-display">Secure QR Emergency Card Architecture</h1>
         <p className="text-warmgray-500 text-sm">
-          How we enforce security, protect personal identifiers, and ensure privacy by design.
+          A showcase of our privacy by design project utilizing a secure QR token system and robust database policies.
         </p>
       </div>
 
@@ -31,10 +31,10 @@ export function SecurityPage() {
         <section className="card">
           <h2 className="text-lg font-semibold text-warmgray-900 mb-3 flex items-center gap-2">
             <Lock className="w-5 h-5 text-brand-500" />
-            Supabase PostgreSQL Row Level Security (RLS)
+            Supabase Row Level Security & PostgreSQL Security
           </h2>
           <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
-            Every database query is gated at the database layer. By leveraging PostgreSQL's native Row Level Security:
+            Every database query is gated at the database layer. As a React Supabase security implementation, this Supabase RLS project leverages PostgreSQL RLS security to enforce absolute data isolation:
           </p>
           <ul className="space-y-2 text-sm text-warmgray-600 list-disc list-inside">
             <li>Caregivers can only view, edit, or delete CareCards that belong to their authenticated user ID (<code className="bg-warmgray-100 px-1 rounded text-xs">auth.uid()</code>).</li>
@@ -47,13 +47,13 @@ export function SecurityPage() {
         <section className="card">
           <h2 className="text-lg font-semibold text-warmgray-900 mb-3 flex items-center gap-2">
             <Cpu className="w-5 h-5 text-brand-500" />
-            Secure Opaque QR Tokens
+            Secure QR Token Security & Privacy Architecture
           </h2>
           <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
             Many emergency QR systems put raw personal data (like name or phone number) straight into the QR code or encode it directly in the URL query parameters. This exposes information to any scanner immediately.
           </p>
           <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
-            CareCard solves this by using **cryptographic, random tokens**:
+            CareCard solves this with a robust **QR token security** model utilizing opaque, cryptographic tokens:
           </p>
           <ul className="space-y-2 text-sm text-warmgray-600 list-disc list-inside">
             <li>The QR code contains only a random UUID string (e.g. <code className="bg-warmgray-100 px-1 rounded text-xs">/scan/7a3f-b25c-...</code>).</li>
@@ -66,13 +66,13 @@ export function SecurityPage() {
         <section className="card">
           <h2 className="text-lg font-semibold text-warmgray-900 mb-3 flex items-center gap-2">
             <EyeOff className="w-5 h-5 text-brand-500" />
-            Granular Data Sanitization
+            Supabase RPC Security & IDOR Prevention
           </h2>
           <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
-            We isolate sensitive contact details using PostgreSQL database RPC functions.
+            We isolate sensitive contact details using PostgreSQL security policies and Supabase RPC security functions.
           </p>
           <ul className="space-y-2 text-sm text-warmgray-600 list-disc list-inside">
-            <li>Private information (like phone numbers, specific instructions, or emails) is never loaded directly into the client-side state.</li>
+            <li>Private information (like phone numbers, specific instructions, or emails) is never loaded directly into the client-side state, achieving IDOR prevention on Supabase.</li>
             <li>Helpers can trigger phone calls or emails through secure endpoints that only expose details to the helper's local browser dialer or email client, rather than revealing them in raw plaintext in the UI code.</li>
             <li>Each piece of data (display name, languages spoken, assistance needs) is toggled individually by the caregiver, allowing them to optimize safety vs privacy.</li>
           </ul>
@@ -82,10 +82,10 @@ export function SecurityPage() {
         <section className="card">
           <h2 className="text-lg font-semibold text-warmgray-900 mb-3 flex items-center gap-2">
             <Server className="w-5 h-5 text-brand-500" />
-            Server-Side Rate Limiting & Scan Security
+            Server-Side Rate Limiting PostgreSQL & Supabase Security Project Architecture
           </h2>
           <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
-            To prevent scraping or automated scanning of public profiles, CareCard implements server-side safeguards:
+            To prevent scraping or automated scanning of public profiles, CareCard implements server side rate limiting PostgreSQL procedures and Edge functions:
           </p>
           <ul className="space-y-2 text-sm text-warmgray-600 list-disc list-inside">
             <li>Strict rate limiting on the card resolution endpoint (<code className="bg-warmgray-100 px-1 rounded text-xs">/api/scan</code>) restricts requests based on IP address and scan volume.</li>

@@ -6,8 +6,8 @@ export function AccessibilityPage() {
   return (
     <div className="page-container page-enter">
       <SEO
-        title="Accessible QR Assistance Card | CareCard"
-        description="Explore CareCard's accessibility and multilingual assistance features designed for people who may need help communicating."
+        title="Accessible QR Assistance Card for People Who Need Help | CareCard"
+        description="Explore our accessibility assistance card options. CareCard acts as a communication assistance card and accessible QR card for emergency communication."
         path="/accessibility"
       />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
@@ -19,9 +19,9 @@ export function AccessibilityPage() {
         <div className="flex items-center gap-2 text-xs font-semibold text-brand-600 uppercase tracking-wider mb-2">
           ♿ Accessibility First
         </div>
-        <h1 className="page-header mb-2 text-3xl">Accessible QR Assistance Card</h1>
+        <h1 className="page-header mb-2 text-3xl font-display">Accessible QR Assistance Card for People Who Need Help</h1>
         <p className="text-warmgray-500 text-sm">
-          How CareCard ensures high accessibility, clear readability, and multilingual support for individuals who need help communicating.
+          How CareCard provides a dedicated accessibility assistance card with multilingual and readable emergency communication options.
         </p>
       </div>
 
@@ -29,10 +29,10 @@ export function AccessibilityPage() {
         <section className="card">
           <h2 className="text-lg font-semibold text-warmgray-900 mb-3">Designed for Diverse Needs</h2>
           <p className="text-sm text-warmgray-600 leading-relaxed mb-4">
-            CareCard is built to assist individuals who may have difficulty communicating during emergency or stressful situations. This includes non-verbal individuals, seniors with cognitive conditions, neurodivergent people, and travelers who do not speak the local language.
+            Our accessible QR card is designed to assist individuals who may have difficulty communicating during emergency or stressful situations. It functions as an effective communication assistance card for non-verbal individuals, seniors with cognitive conditions, neurodivergent people, and travelers.
           </p>
           <p className="text-sm text-warmgray-600 leading-relaxed">
-            Our web application and public scanner views are optimized to be as readable, simple, and quick to load as possible.
+            By acting as an emergency communication card, CareCard ensures that anyone scanning the card immediately gets essential information in clear text and their preferred language, removing communication barriers.
           </p>
         </section>
 

@@ -7,7 +7,7 @@ export function ForCaregiversPage() {
     <div className="page-container page-enter">
       <SEO
         title="Digital Safety Card for Caregivers | CareCard"
-        description="Create privacy-controlled QR safety cards for people you care for, with visibility controls, trusted contacts and QR deactivation."
+        description="Learn how a caregiver QR card protects family members. Manage family emergency QR codes, caregiver emergency contact cards, and elderly parent safety cards."
         path="/for-caregivers"
       />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
@@ -19,20 +19,20 @@ export function ForCaregiversPage() {
         <div className="flex items-center gap-2 text-xs font-semibold text-brand-600 uppercase tracking-wider mb-2">
           🛡️ Family Safety Hub
         </div>
-        <h1 className="page-header mb-2 text-3xl">Digital Safety Cards for Caregivers</h1>
+        <h1 className="page-header mb-2 text-3xl font-display">Digital Safety Card for Caregivers</h1>
         <p className="text-warmgray-500 text-sm">
-          Keep your family members, patients, or school groups safe with centralized QR emergency contact profiles.
+          Keep your family members, patients, or school groups safe with a centralized caregiver QR card dashboard.
         </p>
       </div>
 
       <div className="space-y-6">
         <section className="card">
-          <h2 className="text-lg font-semibold text-warmgray-900 mb-3">Centralized Care Management</h2>
+          <h2 className="text-lg font-semibold text-warmgray-900 mb-3">Centralized Caregiver QR Card Management</h2>
           <p className="text-sm text-warmgray-600 leading-relaxed mb-4">
-            Whether you are a parent managing safety cards for your kids, a child looking after aging parents, or a healthcare coordinator managing multiple patients, CareCard gives you a single workspace to organize all your profiles.
+            Whether you are a parent setting up a family emergency QR code for your kids, or a child setting up an elderly parent safety card, CareCard gives you a single workspace to organize all your caregiver emergency contact cards.
           </p>
           <p className="text-sm text-warmgray-600 leading-relaxed">
-            From a secure online dashboard, you can view active cards, edit information dynamically, and check active scan alerts to stay informed when assistance is requested.
+            From a secure online dashboard, you can edit caregiver emergency contact cards dynamically, view active scan alerts, and update trusted contact information without needing to reprint the physical QR code card.
           </p>
         </section>
 

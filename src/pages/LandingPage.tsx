@@ -14,7 +14,7 @@ export function LandingPage() {
     <div className="page-enter">
       <SEO
         title="CareCard — Privacy-First QR Emergency Contact Card"
-        description="CareCard is a privacy-first QR emergency contact card that helps elderly people, children, and individuals who need assistance reconnect with trusted contacts."
+        description="CareCard is a privacy-first QR emergency contact card that helps elderly people, children, and people who need assistance reconnect with trusted contacts."
         path="/"
       />
       <CareCardSchema />
@@ -42,7 +42,7 @@ export function LandingPage() {
             </h2>
             
             <p className="mt-6 text-base sm:text-lg text-warmgray-500 max-w-2xl mx-auto leading-relaxed">
-              CareCard helps elderly people, children, and individuals who may need assistance reconnect with trusted contacts—without requiring the helper to install an app or expose private details.
+              CareCard helps elderly people, children, and individuals who may need assistance reconnect with trusted contacts through a simple QR card—without unnecessarily exposing private information.
             </p>
 
             {/* CTAs */}
@@ -81,10 +81,10 @@ export function LandingPage() {
                 Why CareCard Exists
               </h2>
               <p className="text-warmgray-600 leading-relaxed mb-4">
-                What happens when someone you care about gets disoriented, lost, or needs communication assistance in public? Custom printed ID bracelets expose private phone numbers, while tracking devices can compromise personal location privacy.
+                What happens when someone you care about gets disoriented, lost, or needs communication assistance in public? Custom printed ID bracelets expose private phone numbers, while tracking devices can compromise personal location privacy. A digital emergency contact card provides a secure, modern solution.
               </p>
               <p className="text-warmgray-600 leading-relaxed mb-6">
-                CareCard is built to address this exact gap. It offers a secure, physical QR card connected to a privacy-controlled digital dashboard. When a scanner helps a cardholder, communication is facilitated without exposing sensitive personal identifiers.
+                CareCard is built to address this exact gap. It is a privacy-first QR card connected to a privacy-controlled digital dashboard. When a helper scans the QR safety card, communication is facilitated without exposing sensitive personal identifiers or requiring an app.
               </p>
               <div className="flex gap-4">
                 <Link to="/for-elderly" className="text-sm font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1">

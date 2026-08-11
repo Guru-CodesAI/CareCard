@@ -6,8 +6,8 @@ export function PrivacyPage() {
   return (
     <div className="page-container page-enter">
       <SEO
-        title="CareCard Privacy — Privacy-First QR Assistance"
-        description="Learn how CareCard minimizes personal information exposure through QR token design, privacy controls and controlled public profiles."
+        title="Privacy-First Emergency Contact Card | CareCard"
+        description="Learn how CareCard acts as a privacy-first emergency contact card. We implement strict QR code privacy and private emergency QR code logic."
         path="/privacy"
       />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
@@ -15,7 +15,7 @@ export function PrivacyPage() {
         Back
       </Link>
 
-      <h1 className="page-header mb-2">Privacy Policy</h1>
+      <h1 className="page-header mb-2 font-display">Privacy-First Emergency Contact Card Policy</h1>
       <p className="text-warmgray-500 text-sm mb-8">
         Last updated: August 2026
       </p>
@@ -28,9 +28,11 @@ export function PrivacyPage() {
             Overview
           </h2>
           <p className="text-sm text-warmgray-600 leading-relaxed">
-            CareCard is a privacy-first digital assistance card. We believe in collecting 
-            only the minimum information necessary to provide the service. This page explains 
-            what data we collect, how we use it, and how we protect it.
+            CareCard is designed from the ground up as a privacy-first emergency contact card that helps people reconnect with trusted contacts without unnecessarily exposing private information. 
+            Unlike products that print names and numbers directly, we prioritize secure emergency contact QR principles and strict QR code privacy controls.
+          </p>
+          <p className="text-sm text-warmgray-600 leading-relaxed mt-3">
+            This policy outlines how our private emergency QR code system operates, how we minimize data exposure, and what controls you have over your profile's public settings.
           </p>
         </section>
 

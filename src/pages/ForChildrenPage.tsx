@@ -6,8 +6,8 @@ export function ForChildrenPage() {
   return (
     <div className="page-container page-enter">
       <SEO
-        title="QR Emergency ID Card for Children | CareCard"
-        description="CareCard provides a simple QR assistance card that helps children reconnect with caregivers when they need help."
+        title="QR Emergency Contact Card for Children | CareCard"
+        description="Learn how a QR emergency card for children helps keep kids safe. CareCard provides a secure child safety QR code and emergency contact card for kids."
         path="/for-children"
       />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
@@ -19,9 +19,9 @@ export function ForChildrenPage() {
         <div className="flex items-center gap-2 text-xs font-semibold text-brand-600 uppercase tracking-wider mb-2">
           👧 Child Safety Solution
         </div>
-        <h1 className="page-header mb-2 text-3xl">Digital QR Emergency ID Cards for Children</h1>
+        <h1 className="page-header mb-2 text-3xl">QR Emergency Contact Card for Children</h1>
         <p className="text-warmgray-500 text-sm">
-          A secure, privacy-first solution to help lost children reconnect with parents at crowded events, theme parks, and school field trips.
+          A secure child safety QR code solution to help lost children reconnect with parents at crowded events, theme parks, and school field trips.
         </p>
       </div>
 
@@ -32,7 +32,7 @@ export function ForChildrenPage() {
             Losing sight of a child at a theme park, beach, or festival is every parent’s worst nightmare. Many parents resort to writing phone numbers on their children's arms, putting paper notes in pockets, or using custom badges.
           </p>
           <p className="text-sm text-warmgray-600 leading-relaxed">
-            CareCard provides a modern, privacy-first alternative. It lets you create a clean digital safety profile. If a child gets lost, any trusted adult or security guard can scan the child's QR badge to quickly call you, without showing the child's home address or raw phone number to passing strangers.
+            CareCard provides a modern, privacy-first alternative. It lets you create a clean digital safety profile. If a child gets lost, any trusted adult or security guard can scan the child's QR code to access the emergency contact card for kids. This QR emergency card for children helps reconnect families quickly without exposing raw numbers.
           </p>
         </section>
 

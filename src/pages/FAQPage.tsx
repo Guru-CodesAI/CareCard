@@ -37,8 +37,8 @@ export function FAQPage() {
   return (
     <div className="page-container page-enter">
       <SEO
-        title="CareCard FAQ — QR Emergency Contact Card Questions"
-        description="Answers to common questions about CareCard, QR emergency contact cards, privacy, elderly safety, caregivers and assistance."
+        title="QR Emergency Contact Card FAQ | CareCard"
+        description="Find answers to emergency QR code questions and learn how QR emergency cards work to protect seniors, children, and vulnerable groups."
         path="/faq"
       />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
@@ -50,9 +50,9 @@ export function FAQPage() {
         <div className="flex items-center gap-2 text-xs font-semibold text-brand-600 uppercase tracking-wider mb-2">
           <HelpCircle className="w-4 h-4" /> Help Center
         </div>
-        <h1 className="page-header mb-2 text-3xl">Frequently Asked Questions</h1>
+        <h1 className="page-header mb-2 text-3xl font-display">QR Emergency Contact Card FAQ</h1>
         <p className="text-warmgray-500 text-sm">
-          Everything you need to know about CareCard's emergency contact profiles and security details.
+          Answers to your emergency QR code questions and a guide on how QR emergency cards work.
         </p>
       </div>
 

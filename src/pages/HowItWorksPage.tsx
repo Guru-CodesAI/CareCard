@@ -6,8 +6,8 @@ export function HowItWorksPage() {
   return (
     <div className="page-container page-enter">
       <SEO
-        title="How CareCard Works — Privacy-First QR Assistance"
-        description="Learn how CareCard uses a privacy-first QR card to help people share essential assistance information and reconnect with trusted contacts."
+        title="How Does a QR Emergency Contact Card Work? | CareCard"
+        description="Learn how a QR emergency contact card works to protect vulnerable individuals. CareCard provides a secure QR safety card that requires no app for helpers."
         path="/how-it-works"
       />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
@@ -19,9 +19,9 @@ export function HowItWorksPage() {
         <div className="flex items-center gap-2 text-xs font-semibold text-brand-600 uppercase tracking-wider mb-2">
           <QrCode className="w-4 h-4" /> User Guide
         </div>
-        <h1 className="page-header mb-2">How CareCard Works</h1>
+        <h1 className="page-header mb-2 text-3xl font-display">How Does a QR Emergency Contact Card Work?</h1>
         <p className="text-warmgray-500 text-sm">
-          A step-by-step guide to setting up and using a privacy-first QR emergency contact card.
+          A step-by-step guide to setting up and using a privacy-first QR safety card without an app.
         </p>
       </div>
 
@@ -33,7 +33,7 @@ export function HowItWorksPage() {
           </div>
           <div>
             <div className="text-xs font-semibold text-brand-500 uppercase tracking-wider mb-1">Step 1</div>
-            <h2 className="text-lg font-semibold text-warmgray-900 mb-2">Create a CareCard Profile</h2>
+            <h2 className="text-lg font-semibold text-warmgray-900 mb-2">Create a Digital Emergency QR Code Profile</h2>
             <p className="text-sm text-warmgray-600 leading-relaxed">
               A caregiver registers a free account and fills in the card holder's basic information. You choose exactly what information can be publicly displayed when scanned, such as language preferences or simple mobility needs, while keeping sensitive phone numbers secure.
             </p>
@@ -47,7 +47,7 @@ export function HowItWorksPage() {
           </div>
           <div>
             <div className="text-xs font-semibold text-blue-500 uppercase tracking-wider mb-1">Step 2</div>
-            <h2 className="text-lg font-semibold text-warmgray-900 mb-2">Print and Carry the QR Card</h2>
+            <h2 className="text-lg font-semibold text-warmgray-900 mb-2">Print and Carry the QR Safety Card</h2>
             <p className="text-sm text-warmgray-600 leading-relaxed">
               Once configuration is complete, generate the card and print it on standard cardstock, paper, or sticker sheets. The card holder carries the physical card in their wallet, pockets, or wears it as a keychain, cardholder, or lanyard.
             </p>
@@ -61,7 +61,7 @@ export function HowItWorksPage() {
           </div>
           <div>
             <div className="text-xs font-semibold text-green-500 uppercase tracking-wider mb-1">Step 3</div>
-            <h2 className="text-lg font-semibold text-warmgray-900 mb-2">A Helper Scans the QR Code</h2>
+            <h2 className="text-lg font-semibold text-warmgray-900 mb-2">Scan the QR Contact Card (No App Required)</h2>
             <p className="text-sm text-warmgray-600 leading-relaxed">
               If the card holder needs assistance (such as when lost, confused, or unable to speak English/local language), a helper scans the QR code using any smartphone camera. **No app installation or account registration is required** for the helper.
             </p>
