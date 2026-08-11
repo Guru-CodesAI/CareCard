@@ -6,8 +6,8 @@ export function ForElderlyPage() {
   return (
     <div className="page-container page-enter">
       <SEO
-        title="QR Safety Card for Elderly People | CareCard"
-        description="Learn how a QR safety card for elderly people helps seniors stay safe. CareCard provides a secure elderly emergency contact card and senior citizen safety card for families."
+        title="CareCard for Elderly People — QR Safety Card"
+        description="Learn how CareCard gives families a simple QR safety card for elderly parents and senior citizens who may need help communicating."
         path="/for-elderly"
       />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
@@ -19,20 +19,20 @@ export function ForElderlyPage() {
         <div className="flex items-center gap-2 text-xs font-semibold text-brand-600 uppercase tracking-wider mb-2">
           👴 Senior Safety Solution
         </div>
-        <h1 className="page-header mb-2 text-3xl">A Simple QR Safety Card for Elderly People</h1>
+        <h1 className="page-header mb-2 text-3xl font-display">CareCard for Elderly People</h1>
         <p className="text-warmgray-500 text-sm">
-          Keep senior family members safe and connected with a privacy-first QR safety card for elderly people.
+          CareCard gives families a simple QR safety card for elderly parents and senior citizens who may need help communicating with someone they don't know.
         </p>
       </div>
 
       <div className="space-y-6">
         <section className="card">
-          <h2 className="text-lg font-semibold text-warmgray-900 mb-3">Why Use a QR Safety Card for Elderly Safety?</h2>
+          <h2 className="text-lg font-semibold text-warmgray-900 mb-3">Why Use a CareCard Elderly QR Card?</h2>
           <p className="text-sm text-warmgray-600 leading-relaxed mb-4">
-            For elderly individuals living with cognitive decline, dementia, Alzheimer's, or communication impairments, a simple outing can present challenges. If they get lost or disoriented, an elderly emergency contact card ensures they can be safely reconnected.
+            For senior citizen family members living with cognitive decline, dementia, or Alzheimer's, a simple outing can present challenges. If they get lost or disoriented, carrying a CareCard elderly QR card ensures senior safety without exposing sensitive contact details.
           </p>
           <p className="text-sm text-warmgray-600 leading-relaxed">
-            CareCard provides a physical, easy-to-carry senior citizen safety card that helpers can scan to access caregiver contacts. This QR emergency card for seniors keeps private numbers hidden while ensuring rapid assistance.
+            By scanning the card, a helper can immediately reach out to your emergency contact or trusted contacts through our secure proxy relay. It functions as an elderly emergency contact card designed with strict privacy rules.
           </p>
         </section>
 

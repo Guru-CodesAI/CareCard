@@ -34,7 +34,7 @@ export function LandingPage() {
             </div>
 
             <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold text-warmgray-900 tracking-tight leading-tight">
-              Privacy-First QR Emergency Contact Card
+              CareCard — Privacy-First QR Emergency Contact Card
             </h1>
             
             <h2 className="mt-4 text-xl sm:text-2xl font-display font-medium text-brand-600">
@@ -42,7 +42,7 @@ export function LandingPage() {
             </h2>
             
             <p className="mt-6 text-base sm:text-lg text-warmgray-500 max-w-2xl mx-auto leading-relaxed">
-              CareCard helps elderly people, children, and individuals who may need assistance reconnect with trusted contacts through a simple QR card—without unnecessarily exposing private information.
+              CareCard is a privacy-first digital assistance system that connects elderly people, children, and individuals who may need help with their trusted contacts through a simple QR card.
             </p>
 
             {/* CTAs */}
@@ -83,8 +83,11 @@ export function LandingPage() {
               <p className="text-warmgray-600 leading-relaxed mb-4">
                 What happens when someone you care about gets disoriented, lost, or needs communication assistance in public? Custom printed ID bracelets expose private phone numbers, while tracking devices can compromise personal location privacy. A digital emergency contact card provides a secure, modern solution.
               </p>
+              <p className="text-warmgray-600 leading-relaxed mb-4">
+                CareCard is built to address this exact gap. It is a privacy-first QR card connected to a privacy-controlled digital dashboard. With a CareCard QR card, a helper can access the information the caregiver has chosen to share without requiring a dedicated app.
+              </p>
               <p className="text-warmgray-600 leading-relaxed mb-6">
-                CareCard is built to address this exact gap. It is a privacy-first QR card connected to a privacy-controlled digital dashboard. When a helper scans the QR safety card, communication is facilitated without exposing sensitive personal identifiers or requiring an app.
+                CareCard for elderly people provides a simple way for families to help loved ones reconnect with trusted contacts.
               </p>
               <div className="flex gap-4">
                 <Link to="/for-elderly" className="text-sm font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1">

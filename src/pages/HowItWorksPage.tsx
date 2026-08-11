@@ -6,8 +6,8 @@ export function HowItWorksPage() {
   return (
     <div className="page-container page-enter">
       <SEO
-        title="How Does a QR Emergency Contact Card Work? | CareCard"
-        description="Learn how a QR emergency contact card works to protect vulnerable individuals. CareCard provides a secure QR safety card that requires no app for helpers."
+        title="CareCard QR — How the Emergency Contact Card Works"
+        description="Learn how the CareCard QR card works to connect helpers with caregivers in an emergency without exposing sensitive data."
         path="/how-it-works"
       />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
@@ -19,9 +19,9 @@ export function HowItWorksPage() {
         <div className="flex items-center gap-2 text-xs font-semibold text-brand-600 uppercase tracking-wider mb-2">
           <QrCode className="w-4 h-4" /> User Guide
         </div>
-        <h1 className="page-header mb-2 text-3xl font-display">How Does a QR Emergency Contact Card Work?</h1>
+        <h1 className="page-header mb-2 text-3xl font-display">How the CareCard QR Card Works</h1>
         <p className="text-warmgray-500 text-sm">
-          A step-by-step guide to setting up and using a privacy-first QR safety card without an app.
+          A step-by-step guide to setting up and using your CareCard QR emergency contact card without installing any apps.
         </p>
       </div>
 

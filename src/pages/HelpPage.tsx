@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import {
   Heart, QrCode, Phone, Shield, Scan, User, 
   HelpCircle, ArrowLeft, ChevronRight, AlertTriangle,
-  RefreshCw, Globe, Printer
+  RefreshCw, Lock, EyeOff, Printer, Info
 } from 'lucide-react'
 import { SEO } from '@/components/SEO'
 
@@ -11,7 +11,7 @@ export function HelpPage() {
     <div className="page-container page-enter">
       <SEO
         title="CareCard Help — QR Safety Card Guide"
-        description="Learn how to create, carry, scan and manage a CareCard QR safety card."
+        description="Learn how to create, carry, scan, and manage a CareCard QR safety card. Access our official user guide and troubleshooting tips."
         path="/help"
       />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
@@ -19,158 +19,203 @@ export function HelpPage() {
         Back
       </Link>
 
-      <h1 className="page-header mb-2 flex items-center gap-2">
-        <HelpCircle className="w-7 h-7 text-brand-500" />
-        Help & Safety
-      </h1>
-      <p className="text-warmgray-500 text-sm mb-8">
-        Learn how CareCard works and how to use it.
-      </p>
-
-      {/* What is CareCard */}
-      <section className="card mb-6">
-        <h2 className="text-lg font-semibold text-warmgray-900 mb-3">What is CareCard?</h2>
-        <p className="text-sm text-warmgray-600 leading-relaxed">
-          CareCard is a privacy-first digital assistance card that helps people safely reconnect
-          vulnerable individuals with trusted contacts. A caregiver creates a secure CareCard,
-          the card holder carries its QR code, and a helper can scan it without installing an app
-          to access limited assistance information and contact a trusted person.
+      <div className="mb-6">
+        <div className="flex items-center gap-2 text-xs font-semibold text-brand-600 uppercase tracking-wider mb-2">
+          <HelpCircle className="w-4 h-4" /> User Guide
+        </div>
+        <h1 className="page-header mb-2 text-3xl font-display flex items-center gap-2">
+          CareCard Help & User Guide
+        </h1>
+        <p className="text-warmgray-500 text-sm">
+          Welcome to the official CareCard support and assistance directory. Learn how to use and manage your QR emergency contact card.
         </p>
-      </section>
+      </div>
 
-      {/* How to use */}
-      <section className="card mb-6">
-        <h2 className="text-lg font-semibold text-warmgray-900 mb-4">How to use CareCard</h2>
-        <div className="space-y-4">
-          {[
-            {
-              icon: <User className="w-5 h-5 text-brand-500" />,
-              title: 'For Caregivers',
-              steps: [
-                'Create an account on CareCard',
-                'Fill in the card holder\'s basic information',
-                'Add trusted contacts (family members, guardians)',
-                'Choose what information helpers can see',
-                'Generate and print the QR code card',
-                'Give the card to the person who needs it',
-              ]
-            },
-            {
-              icon: <QrCode className="w-5 h-5 text-blue-500" />,
-              title: 'For Card Holders',
-              steps: [
-                'Simply carry the printed card',
-                'No app installation needed',
-                'No technical knowledge required',
-                'Keep the card in a wallet, lanyard, or pocket',
-              ]
-            },
-            {
-              icon: <Scan className="w-5 h-5 text-green-500" />,
-              title: 'For Helpers',
-              steps: [
-                'Open your phone camera',
-                'Scan the QR code on the card',
-                'View the assistance information',
-                'Contact the trusted person shown',
-                'No account or app required',
-              ]
-            },
-          ].map((section) => (
-            <div key={section.title} className="p-4 rounded-xl bg-warmgray-50 border border-warmgray-200">
-              <h3 className="font-semibold text-warmgray-800 flex items-center gap-2 mb-3">
-                {section.icon}
-                {section.title}
-              </h3>
-              <ol className="space-y-2">
-                {section.steps.map((step, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-warmgray-600">
-                    <span className="w-5 h-5 rounded-full bg-warmgray-200 flex items-center justify-center text-xs font-semibold text-warmgray-600 shrink-0 mt-0.5">
-                      {i + 1}
-                    </span>
-                    {step}
-                  </li>
-                ))}
+      <div className="space-y-8">
+        {/* Section: What is CareCard? */}
+        <section className="card">
+          <h2 className="text-xl font-bold text-warmgray-900 mb-3" id="what-is-carecard">
+            What is CareCard?
+          </h2>
+          <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
+            CareCard is a privacy-first digital assistance system designed to connect senior citizens, children, and individuals who may need help communicating with their trusted contacts. 
+          </p>
+          <p className="text-sm text-warmgray-600 leading-relaxed">
+            By combining a physical QR card with a secure caregiver dashboard, families can ensure that if a loved one gets disoriented or lost, a helper can scan the card to reconnect them safely without exposing private phone numbers or addresses.
+          </p>
+        </section>
+
+        {/* Section: How does a CareCard QR work? */}
+        <section className="card">
+          <h2 className="text-xl font-bold text-warmgray-900 mb-3" id="how-does-qr-work">
+            How does a CareCard QR work?
+          </h2>
+          <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
+            Every CareCard contains a secure, opaque QR code. When scanned by a helper's mobile camera:
+          </p>
+          <ul className="space-y-2 text-sm text-warmgray-600 list-disc list-inside mb-3">
+            <li>The browser requests our secure database to resolve the card's public profile.</li>
+            <li>No personal identification or private contact numbers are hardcoded inside the physical card's QR pattern.</li>
+            <li><strong>No app registration or app installation is required</strong> for the helper. They simply view the responsive browser page.</li>
+          </ul>
+        </section>
+
+        {/* Section: How to create a CareCard */}
+        <section className="card">
+          <h2 className="text-xl font-bold text-warmgray-900 mb-3" id="how-to-create">
+            How to create a CareCard
+          </h2>
+          <div className="flex gap-4 items-start bg-warmgray-50 p-4 rounded-xl border border-warmgray-200">
+            <User className="w-6 h-6 text-brand-500 shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm text-warmgray-600 leading-relaxed mb-2">
+                Setting up a CareCard QR profile is quick and free:
+              </p>
+              <ol className="list-decimal list-inside text-sm text-warmgray-600 space-y-1">
+                <li>Create a caregiver account or sign in.</li>
+                <li>Go to the dashboard and select <strong>Create Card</strong>.</li>
+                <li>Enter basic cardholder information (name, language, optional details).</li>
+                <li>Add one or more trusted contact numbers and emails.</li>
+                <li>Generate the profile and download the printable QR card card.</li>
               </ol>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        </section>
 
-      {/* FAQ */}
-      <section className="card mb-6">
-        <h2 className="text-lg font-semibold text-warmgray-900 mb-4">Common Questions</h2>
-        <div className="space-y-3">
-          {[
-            {
-              q: 'Will strangers see my phone number?',
-              a: 'No. CareCard only displays information you choose to make public. Private contact details are never exposed through the QR code or scan page.',
-            },
-            {
-              q: 'Can someone track me with CareCard?',
-              a: 'CareCard does not continuously track you. Temporary location sharing is optional and automatically expires after the set duration.',
-            },
-            {
-              q: 'What if I lose my card?',
-              a: 'Deactivate the old card from your dashboard and generate a new QR. The old QR becomes invalid immediately.',
-            },
-            {
-              q: 'What if my family contact changes?',
-              a: 'Update the trusted contact in your dashboard. The physical card doesn\'t need reprinting since the QR points to your online profile.',
-            },
-            {
-              q: 'What if my QR is copied?',
-              a: 'Revoke the old QR and generate a new one from the card management page. The old QR will stop working immediately.',
-            },
-            {
-              q: 'Does this replace emergency services?',
-              a: 'No. CareCard is a communication aid. If someone is in immediate danger or needs urgent medical help, always contact the appropriate local emergency service.',
-            },
-            {
-              q: 'Does CareCard store my medical records?',
-              a: 'No. CareCard is designed to minimize sensitive information. It does not store medical records, diagnoses, or health data.',
-            },
-            {
-              q: 'Does the app work without internet?',
-              a: 'The QR scan requires internet to load the profile. For offline situations, the physical card can include minimal printed information chosen by the caregiver.',
-            },
-          ].map((faq) => (
-            <details key={faq.q} className="group">
-              <summary className="flex items-center justify-between p-3 rounded-lg cursor-pointer hover:bg-warmgray-50 transition-colors font-medium text-warmgray-800 text-sm list-none">
-                {faq.q}
-                <ChevronRight className="w-4 h-4 text-warmgray-400 group-open:rotate-90 transition-transform shrink-0 ml-2" />
-              </summary>
-              <p className="px-3 pb-3 text-sm text-warmgray-500 leading-relaxed">{faq.a}</p>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      {/* Emergency */}
-      <section className="p-4 rounded-xl bg-red-50 border border-red-200 mb-6">
-        <div className="flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-          <div>
-            <h2 className="font-semibold text-red-800 mb-1">In an Emergency</h2>
-            <p className="text-sm text-red-700 leading-relaxed">
-              CareCard is a communication aid and does not replace emergency services.
-              If someone is in immediate danger or requires urgent medical assistance,
-              contact the appropriate local emergency service.
-            </p>
-            <div className="mt-3 space-y-1 text-sm">
-              <p className="text-red-700"><strong>India:</strong> 112 (Emergency) · 108 (Ambulance)</p>
-              <p className="text-red-700"><strong>International:</strong> 112</p>
+        {/* Section: How to scan a CareCard */}
+        <section className="card">
+          <h2 className="text-xl font-bold text-warmgray-900 mb-3" id="how-to-scan">
+            How to scan a CareCard
+          </h2>
+          <div className="flex gap-4 items-start bg-warmgray-50 p-4 rounded-xl border border-warmgray-200">
+            <Scan className="w-6 h-6 text-green-500 shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm text-warmgray-600 leading-relaxed mb-2">
+                If you encounter someone carrying a CareCard who needs assistance:
+              </p>
+              <ol className="list-decimal list-inside text-sm text-warmgray-600 space-y-1">
+                <li>Open your smartphone's native camera app or any QR reader.</li>
+                <li>Point the camera at the card's QR code.</li>
+                <li>Tap the link banner that appears on your screen.</li>
+                <li>Review the shared communication needs or languages.</li>
+                <li>Tap the call or message buttons to communicate with their family.</li>
+              </ol>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA */}
-      <div className="text-center py-4">
-        <Link to="/auth" className="btn-primary">
-          <Heart className="w-4 h-4" fill="white" />
-          Create Your CareCard
-        </Link>
+        {/* Section: How to deactivate a CareCard */}
+        <section className="card">
+          <h2 className="text-xl font-bold text-warmgray-900 mb-3" id="how-to-deactivate">
+            How to deactivate a CareCard
+          </h2>
+          <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
+            If a printed QR emergency card is misplaced or stolen, you can deactivate it immediately to secure your data:
+          </p>
+          <ul className="space-y-2 text-sm text-warmgray-600 list-disc list-inside">
+            <li>Log into your CareCard dashboard, click on the card, and select <strong>Deactivate Card</strong>.</li>
+            <li>This turns off public profile visibility. Anyone scanning the deactivated QR code will see a "Card Deactivated" warning instead of your profile.</li>
+          </ul>
+        </section>
+
+        {/* Section: How to regenerate a CareCard QR */}
+        <section className="card">
+          <h2 className="text-xl font-bold text-warmgray-900 mb-3" id="how-to-regenerate">
+            How to regenerate a CareCard QR
+          </h2>
+          <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
+            If you want to keep the same profile details but render old printed QR codes invalid, you can regenerate the secure token:
+          </p>
+          <div className="flex items-start gap-2 bg-brand-50 p-3 rounded-lg border border-brand-200 text-sm text-warmgray-700">
+            <RefreshCw className="w-4 h-4 text-brand-600 shrink-0 mt-0.5" />
+            <p>
+              Under card settings, tap <strong>Regenerate QR Token</strong>. A new cryptographic card ID is mapped to your profile. The old QR code is invalidated instantly. You should print the new QR card for the cardholder to carry.
+            </p>
+          </div>
+        </section>
+
+        {/* Section: CareCard privacy & security */}
+        <section className="card">
+          <h2 className="text-xl font-bold text-warmgray-900 mb-3" id="privacy-security">
+            CareCard privacy & security
+          </h2>
+          <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
+            CareCard is built on a "Privacy by Design" architecture. We keep your family's personal information safe through:
+          </p>
+          <div className="grid md:grid-cols-2 gap-4 mt-2">
+            <div className="p-3 bg-warmgray-50 rounded-lg border border-warmgray-100">
+              <h3 className="font-semibold text-xs uppercase tracking-wider text-warmgray-400 mb-1 flex items-center gap-1.5">
+                <Lock className="w-3.5 h-3.5 text-brand-500" /> Supabase RLS
+              </h3>
+              <p className="text-xs text-warmgray-500 leading-relaxed">
+                Row Level Security restricts card editing or deletion access to the authorized caregiver account only.
+              </p>
+            </div>
+            <div className="p-3 bg-warmgray-50 rounded-lg border border-warmgray-100">
+              <h3 className="font-semibold text-xs uppercase tracking-wider text-warmgray-400 mb-1 flex items-center gap-1.5">
+                <EyeOff className="w-3.5 h-3.5 text-brand-500" /> Proxy Relay
+              </h3>
+              <p className="text-xs text-warmgray-500 leading-relaxed">
+                Contact methods are executed through secure redirection relays to keep phone numbers from exposure in the page source.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section: CareCard FAQ */}
+        <section className="card">
+          <h2 className="text-xl font-bold text-warmgray-900 mb-4" id="faq">
+            CareCard FAQ
+          </h2>
+          <div className="space-y-3">
+            {[
+              {
+                q: 'Will strangers see my personal phone number?',
+                a: 'No. The scanner only sees the custom greeting, communication preferences, and a proxy contact trigger. The actual numbers are hidden.',
+              },
+              {
+                q: 'Does CareCard track physical location?',
+                a: 'CareCard does not track location. It only records helper scan event times to notify caregivers, without tracking help cookies or device GPS.',
+              },
+              {
+                q: 'Is there a fee for creating a card?',
+                a: 'No. Creating and managing a CareCard emergency contact profile is completely free.',
+              },
+              {
+                q: 'Do helpers need to register?',
+                a: 'No registration or app downloads are needed for someone scanning the card to connect with you.',
+              },
+            ].map((faq) => (
+              <details key={faq.q} className="group border-b border-warmgray-100 pb-2">
+                <summary className="flex items-center justify-between py-2 cursor-pointer hover:text-brand-500 transition-colors font-medium text-warmgray-850 text-sm list-none">
+                  {faq.q}
+                  <ChevronRight className="w-4 h-4 text-warmgray-400 group-open:rotate-90 transition-transform shrink-0 ml-2" />
+                </summary>
+                <p className="py-2 text-sm text-warmgray-550 leading-relaxed">{faq.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Emergency disclaimer */}
+        <section className="p-4 rounded-xl bg-red-50 border border-red-200">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+            <div>
+              <h2 className="font-semibold text-red-800 mb-1">Emergency Disclaimer</h2>
+              <p className="text-sm text-red-700 leading-relaxed">
+                CareCard is a communication helper. It is not a locator beacon, continuous tracker, or medical diagnostics system. In immediate risk, always contact local emergency services (112 / 911).
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <div className="text-center pt-4">
+          <Link to="/auth" className="btn-primary inline-flex">
+            <Heart className="w-4 h-4" fill="white" />
+            Create Your CareCard
+          </Link>
+        </div>
       </div>
     </div>
   )
