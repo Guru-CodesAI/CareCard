@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getPublicProfile, getPublicContacts } from '@/lib/data'
+import { getPublicCard } from '@/lib/data'
 import { getLanguageDisplay, RateLimiter } from '@/lib/utils'
 import { PublicCardProfile, SCAN_PAGE_TRANSLATIONS } from '@/types'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import {
-  Heart, Phone, Mail, Globe, Accessibility, MapPin,
+  Heart, Phone, Globe, Accessibility, MapPin,
   MessageSquare, AlertTriangle, ShieldCheck, Shield,
-  ChevronDown, ChevronUp, Info, ExternalLink
+  ChevronDown, ChevronUp, Info
 } from 'lucide-react'
 import { SEO } from '@/components/SEO'
 
@@ -26,7 +26,7 @@ export function ScanPage() {
   const [profile, setProfile] = useState<PublicCardProfile | null>(null)
   const [contacts, setContacts] = useState<PublicContact[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<'invalid' | 'deactivated' | 'rate_limited' | null>(null)
+  const [error, setError] = useState<'unavailable' | 'rate_limited' | null>(null)
   const [showContacts, setShowContacts] = useState(false)
   const [showLanguageHelp, setShowLanguageHelp] = useState(false)
   const [contactIndex, setContactIndex] = useState(0)
@@ -64,30 +64,20 @@ export function ScanPage() {
     }
 
     try {
-      const data = await getPublicProfile(token)
+      const data = await getPublicCard(token)
       if (!data) {
-        setError('invalid')
+        setError('unavailable')
         setLoading(false)
         return
       }
 
-      if (data.status === 'deactivated' || data.status === 'inactive') {
-        setProfile(data)
-        setError('deactivated')
-        setLoading(false)
-        return
-      }
-
-      setProfile(data)
-
-      // Load contacts
-      const contactsData = await getPublicContacts(token)
-      setContacts(contactsData)
+      setProfile(data.profile)
+      setContacts(data.contacts)
     } catch (err) {
       console.error(err)
       setError(err instanceof Error && err.message.includes('Rate limit exceeded')
         ? 'rate_limited'
-        : 'invalid')
+        : 'unavailable')
     } finally {
       setLoading(false)
     }
@@ -120,16 +110,16 @@ export function ScanPage() {
     )
   }
 
-  // Error: Invalid or expired
-  if (error === 'invalid') {
+  // Error: Unavailable (invalid token, expired, or deactivated — generic response for privacy)
+  if (error === 'unavailable') {
     return (
       <div className="min-h-dvh flex items-center justify-center bg-warmgray-50 px-4">
         <div className="max-w-sm w-full text-center">
           <div className="w-16 h-16 bg-warmgray-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Shield className="w-8 h-8 text-warmgray-400" />
           </div>
-          <h1 className="text-xl font-bold text-warmgray-900 mb-2">Invalid CareCard</h1>
-          <p className="text-warmgray-500 text-sm mb-6">{t.invalidCard}</p>
+          <h1 className="text-xl font-bold text-warmgray-900 mb-2">CareCard Unavailable</h1>
+          <p className="text-warmgray-500 text-sm mb-6">{t.unavailableCard}</p>
           <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-800">
             <p className="font-medium">Need immediate help?</p>
             <p className="mt-1 text-xs">
@@ -140,24 +130,6 @@ export function ScanPage() {
             <Heart className="w-4 h-4" />
             About CareCard
           </Link>
-        </div>
-      </div>
-    )
-  }
-
-  // Error: Deactivated card
-  if (error === 'deactivated') {
-    return (
-      <div className="min-h-dvh flex items-center justify-center bg-warmgray-50 px-4">
-        <div className="max-w-sm w-full text-center">
-          <div className="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <Shield className="w-8 h-8 text-red-400" />
-          </div>
-          <h1 className="text-xl font-bold text-warmgray-900 mb-2">Card Deactivated</h1>
-          <p className="text-warmgray-500 text-sm mb-6">{t.deactivatedCard}</p>
-          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-800">
-            <p>If someone needs immediate help, contact local emergency services.</p>
-          </div>
         </div>
       </div>
     )
