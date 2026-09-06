@@ -44,8 +44,10 @@ CareCard bridges this gap by combining **physical simplicity with digital privac
 [ Physical QR Card ]  ──▶  [ Opaque Bearer Token ]  ──▶  [ Secure Public Profile ]
                                                                  │
                                                                  ▼
-[ Family Reconnected ] ◀── [ Masked Proxy Relay ] ◀── [ Enabled Contacts Only ]
+                                                     [ Contact Information Revealed ]
 ```
+
+**Production Enhancement (Planned):** A future server-side secure relay could connect helpers to caregivers without exposing contact details to the browser.
 
 ---
 
@@ -58,7 +60,7 @@ CareCard bridges this gap by combining **physical simplicity with digital privac
 * **One-Click Deactivation:** Lost your card? Instantly deactivate it or regenerate the QR. Old QR codes become immediately invalid.
 
 ### 🌐 Assistant Tools (Helper View)
-* **Contact Assistance:** Connects helpers to caregivers via a simulated secure proxy relay to keep raw contact values (phone/email) fully private.
+* **Contact Assistance (MVP Demo):** Displays verified trusted contacts securely retrieved via server-side RPCs. In this MVP, contact information is revealed to the helper; a future production release may include a server-side proxy relay to keep contact details fully private.
 * **Multilingual Support:** Supports English, Tamil, and Hindi.
 * **Language Assistance Cards:** Provides instant translation cards to help strangers communicate basic assistance phrases with the cardholder.
 * **Scan Auditing:** Real-time log tracking for caregivers to see when and how many times a card was scanned.
@@ -185,7 +187,7 @@ Follow this workflow to test the entire application:
 1. **Dashboard & Auth:** Sign up as a Caregiver.
 2. **Create Card:** Click **Create CareCard** and follow the step-by-step wizard. Add contacts (e.g. Son, Daughter) and configure your public privacy toggles.
 3. **QR Generation:** View your new card. Download or click **Preview** to simulate scanning.
-4. **Public Profile (Helper View):** You will be redirected to the secure scan page. Try out the **Help with Language** cards and click **Contact Assistance** to view the simulated relay tunnel.
+4. **Public Profile (Helper View):** You will be redirected to the secure scan page. View trusted contacts and language assistance cards. The **Contact Assistance** section explains that this MVP shows contact information; a production release may add a server-side relay for additional privacy.
 5. **Logs & Auditing:** Return to your dashboard. Under **Scan Activity**, you will see the scan recorded instantly.
 6. **Card Reactivation:** Click **Deactivate Card** and scan the old QR code $\rightarrow$ Access is immediately denied.
 7. **Regenerate QR:** Reactivate your card and click **Regenerate QR** $\rightarrow$ A new secure token is created, and the old QR is permanently invalidated.
@@ -199,7 +201,7 @@ Follow this workflow to test the entire application:
 > If the cardholder is in immediate danger or requires urgent medical attention, contact the appropriate local emergency service (e.g. 911 / 100) immediately.
 
 > [!NOTE]
-> **Demo Flow:** Raw trusted-contact phone numbers and email addresses are never returned to the helper's browser. Contact actions are currently demonstrated through a secure simulated frontend MVP flow.
+> **MVP Architecture:** This is a minimum viable product (MVP) demonstrating the core QR security and contact architecture. Trusted contacts are retrieved via secure server-side RPCs and displayed to helpers. A future production release may include a server-side communication relay to further enhance privacy by preventing direct exposure of contact details.
 
 ---
 

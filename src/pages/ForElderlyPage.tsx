@@ -32,7 +32,7 @@ export function ForElderlyPage() {
             For senior citizen family members living with cognitive decline, dementia, or Alzheimer's, a simple outing can present challenges. If they get lost or disoriented, carrying a CareCard elderly QR card ensures senior safety without exposing sensitive contact details.
           </p>
           <p className="text-sm text-warmgray-600 leading-relaxed">
-            By scanning the card, a helper can immediately reach out to your emergency contact or trusted contacts through our secure proxy relay. It functions as an elderly emergency contact card designed with strict privacy rules.
+            By scanning the card, a helper can access trusted contact information and communicate with your emergency contacts. CareCard functions as an elderly emergency contact card designed with strict privacy rules and cryptographic token security.
           </p>
         </section>
 

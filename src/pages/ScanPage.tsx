@@ -31,13 +31,6 @@ export function ScanPage() {
   const [showLanguageHelp, setShowLanguageHelp] = useState(false)
   const [contactIndex, setContactIndex] = useState(0)
   const [showSafetyNotice, setShowSafetyNotice] = useState(true)
-  
-  // Secure Relay State
-  const [showRelayModal, setShowRelayModal] = useState(false)
-  const [relayType, setRelayType] = useState<'phone' | 'email'>('phone')
-  const [relayContact, setRelayContact] = useState<PublicContact | null>(null)
-  const [relayProgress, setRelayProgress] = useState(0)
-  const [relayStatus, setRelayStatus] = useState<'connecting' | 'connected'>('connecting')
 
   // Get translations based on card language
   const lang = profile?.preferred_language || 'en'
@@ -99,28 +92,6 @@ export function ScanPage() {
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleContact = (contact: PublicContact) => {
-    setRelayContact(contact)
-    setRelayType(contact.contact_method)
-    setRelayStatus('connecting')
-    setRelayProgress(0)
-    setShowRelayModal(true)
-
-    const duration = 1500
-    const intervalTime = 50
-    const steps = duration / intervalTime
-    let stepCount = 0
-
-    const timer = setInterval(() => {
-      stepCount++
-      setRelayProgress(Math.min(Math.round((stepCount / steps) * 100), 100))
-      if (stepCount >= steps) {
-        clearInterval(timer)
-        setRelayStatus('connected')
-      }
-    }, intervalTime)
   }
 
   const handleTryNext = () => {
@@ -312,7 +283,7 @@ export function ScanPage() {
           </div>
         </div>
 
-        {/* Primary CTA: Contact Trusted Person */}
+        {/* Primary CTA: Contact Assistance */}
         {contacts.length > 0 && (
           <div className="mb-6">
             {!showContacts ? (
@@ -332,45 +303,42 @@ export function ScanPage() {
                 </h2>
 
                 {currentContact && (
-                  <div className="p-4 rounded-xl bg-warmgray-50 border border-warmgray-200 mb-4">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="font-semibold text-warmgray-800">{currentContact.contact_name}</span>
-                      <span className="text-xs text-warmgray-400">— {currentContact.relationship}</span>
-                      {currentContact.is_primary && (
-                        <span className="text-xs text-brand-600 font-semibold">Primary</span>
-                      )}
+                  <div className="space-y-4">
+                    <div className="p-4 rounded-xl bg-warmgray-50 border border-warmgray-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="font-semibold text-warmgray-800">{currentContact.contact_name}</span>
+                        <span className="text-xs text-warmgray-400">— {currentContact.relationship}</span>
+                        {currentContact.is_primary && (
+                          <span className="text-xs text-brand-600 font-semibold">Primary</span>
+                        )}
+                      </div>
                     </div>
 
-                    <button
-                      onClick={() => handleContact(currentContact)}
-                      className="btn-primary w-full mb-2"
-                      id="scan-call-button"
-                    >
-                      {currentContact.contact_method === 'phone' ? (
-                        <><Phone className="w-4 h-4" /> {t.callNow}</>
-                      ) : (
-                        <><Mail className="w-4 h-4" /> {t.sendEmail}</>
-                      )}
-                    </button>
-                    <p className="text-[10px] text-warmgray-400 text-center">
-                      Note: This will launch your device's native dialer or mail application.
-                    </p>
+                    <div className="p-4 rounded-xl bg-blue-50 border border-blue-200">
+                      <p className="text-xs text-blue-800 leading-relaxed mb-3">
+                        <Info className="w-4 h-4 inline mr-2" />
+                        <strong>Demo Mode:</strong> This deployment does not initiate phone calls or emails. 
+                      </p>
+                      <p className="text-xs text-blue-700">
+                        A production deployment with a real server-side communication relay (e.g., Twilio, SendGrid) would securely contact the caregiver while keeping their number private.
+                      </p>
+                    </div>
+
+                    {contactIndex < contacts.length - 1 && (
+                      <button
+                        onClick={handleTryNext}
+                        className="btn-secondary w-full text-sm"
+                      >
+                        {t.tryAnother}
+                      </button>
+                    )}
+
+                    {contactIndex > 0 && contactIndex >= contacts.length - 1 && (
+                      <p className="text-xs text-warmgray-400 text-center mt-2">
+                        {t.contactUnavailable}
+                      </p>
+                    )}
                   </div>
-                )}
-
-                {contactIndex < contacts.length - 1 && (
-                  <button
-                    onClick={handleTryNext}
-                    className="btn-secondary w-full text-sm"
-                  >
-                    {t.tryAnother}
-                  </button>
-                )}
-
-                {contactIndex > 0 && contactIndex >= contacts.length - 1 && (
-                  <p className="text-xs text-warmgray-400 text-center mt-2">
-                    {t.contactUnavailable}
-                  </p>
                 )}
               </div>
             )}
@@ -424,88 +392,6 @@ export function ScanPage() {
           </p>
         </div>
       </div>
-
-      {/* Secure Relay Modal */}
-      {showRelayModal && relayContact && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white max-w-sm w-full rounded-2xl p-6 shadow-2xl relative border border-warmgray-100 flex flex-col items-center text-center page-enter">
-            {/* Modal Icon / Visuals */}
-            {relayStatus === 'connecting' ? (
-              <div className="w-20 h-20 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center mb-6 relative animate-pulse">
-                <ShieldCheck className="w-10 h-10" />
-                <div className="absolute inset-0 rounded-full border-4 border-brand-500/20 animate-ping" />
-              </div>
-            ) : (
-              <div className="w-20 h-20 bg-green-50 text-green-600 rounded-full flex items-center justify-center mb-6 relative">
-                <Phone className="w-10 h-10 animate-bounce" />
-                <div className="absolute inset-0 rounded-full border-4 border-green-500/20 animate-pulse" />
-              </div>
-            )}
-
-            <h3 className="text-lg font-bold text-warmgray-900 mb-1">
-              Contact Assistance
-            </h3>
-            <p className="text-xs text-warmgray-400 mb-4 font-medium uppercase tracking-wider">
-              Simulated Secure Proxy Relay
-            </p>
-
-            <div className="w-full bg-warmgray-50 rounded-xl p-4 border border-warmgray-100 mb-6 text-left">
-              <div className="text-xs text-warmgray-400 mb-1 font-semibold">RECIPIENT</div>
-              <div className="font-semibold text-warmgray-800 text-sm">
-                {relayContact.contact_name} ({relayContact.relationship})
-              </div>
-              <div className="text-xs text-warmgray-500 mt-1 font-mono">
-                Relay Session: {token?.substring(0, 8).toUpperCase() || 'UNKNOWN'}
-              </div>
-            </div>
-
-            {relayStatus === 'connecting' ? (
-              <div className="w-full">
-                <p className="text-xs text-warmgray-600 mb-2 font-medium">
-                  Establishing private routing tunnel... {relayProgress}%
-                </p>
-                <div className="w-full bg-warmgray-100 h-2 rounded-full overflow-hidden mb-6">
-                  <div 
-                    className="h-full bg-brand-500 transition-all duration-100" 
-                    style={{ width: `${relayProgress}%` }}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="w-full space-y-4">
-                <p className="text-xs text-warmgray-600 leading-relaxed bg-green-50/50 text-green-800 p-3 rounded-lg border border-green-100">
-                  🛡️ <strong>Demo Simulation:</strong> In production, this request connects to a server-side proxy relay (e.g. Twilio/SendGrid). Your browser receives no PII.
-                </p>
-                
-                {relayType === 'phone' ? (
-                  <a
-                    href="tel:+18005550199"
-                    className="btn-primary w-full py-3 flex items-center justify-center gap-2"
-                  >
-                    <Phone className="w-4 h-4" />
-                    Place Proxy Call
-                  </a>
-                ) : (
-                  <a
-                    href={`mailto:relay-session@carecard.org?subject=CareCard%20Secure%20Relay%20[ID:${token?.substring(0, 8)}]`}
-                    className="btn-primary w-full py-3 flex items-center justify-center gap-2"
-                  >
-                    <Mail className="w-4 h-4" />
-                    Send Proxy Email
-                  </a>
-                )}
-              </div>
-            )}
-
-            <button
-              onClick={() => setShowRelayModal(false)}
-              className="text-xs text-warmgray-400 font-semibold hover:text-warmgray-600 mt-4 transition-colors"
-            >
-              Cancel & Close
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

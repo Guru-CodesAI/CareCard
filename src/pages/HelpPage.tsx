@@ -153,10 +153,10 @@ export function HelpPage() {
             </div>
             <div className="p-3 bg-warmgray-50 rounded-lg border border-warmgray-100">
               <h3 className="font-semibold text-xs uppercase tracking-wider text-warmgray-400 mb-1 flex items-center gap-1.5">
-                <EyeOff className="w-3.5 h-3.5 text-brand-500" /> Proxy Relay
+                <EyeOff className="w-3.5 h-3.5 text-brand-500" /> Server-Side Security
               </h3>
               <p className="text-xs text-warmgray-500 leading-relaxed">
-                Contact methods are executed through secure redirection relays to keep phone numbers from exposure in the page source.
+                Contact information is retrieved through secure server-side RPC functions with strict database permissions. In this MVP, contact details are displayed to helpers; a production release may add a server-side relay to keep numbers fully private.
               </p>
             </div>
           </div>
@@ -171,7 +171,7 @@ export function HelpPage() {
             {[
               {
                 q: 'Will strangers see my personal phone number?',
-                a: 'No. The scanner only sees the custom greeting, communication preferences, and a proxy contact trigger. The actual numbers are hidden.',
+                a: 'Contact information is retrieved through secure server-side database functions. Caregivers control exactly which contacts are marked as verified and visible to helpers. A future production release may add a server-side relay to prevent even helpers from directly viewing contact numbers.',
               },
               {
                 q: 'Does CareCard track physical location?',

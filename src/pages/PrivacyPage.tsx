@@ -100,7 +100,7 @@ export function PrivacyPage() {
             approach where only essential assistance information is shown.
           </p>
           <p className="text-sm text-warmgray-600 leading-relaxed">
-            Private information such as exact addresses are never displayed in the public QR scan page or encoded in the QR code itself. The QR page allows helpers to call or email trusted contacts; while the contacts list is served via secure server-side database RPC functions, the helper's browser initiates the direct call (<code className="font-mono text-xs">tel:</code>/<code className="font-mono text-xs">mailto:</code>), which exposes the destination contact value to the helper's native dialer. For production deployments requiring absolute confidentiality, a server-side telephone relay/proxy is recommended.
+            Private information such as exact addresses are never displayed in the public QR scan page or encoded in the QR code itself. Verified trusted contacts are retrieved via secure server-side database RPC functions and displayed to helpers. A future production release may include a server-side communication relay to prevent direct exposure of contact details while still enabling helpers to reach caregivers.
           </p>
         </section>
 

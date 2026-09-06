@@ -348,9 +348,9 @@ export function LandingPage() {
 
             <div className="card bg-warmgray-50/50 hover:shadow-card-hover transition-all duration-300">
               <Server className="w-8 h-8 text-brand-500 mb-4" />
-              <h3 className="text-base font-semibold text-warmgray-900 mb-2">Server-Side Proxy</h3>
+              <h3 className="text-base font-semibold text-warmgray-900 mb-2">Server-Side RPC Security</h3>
               <p className="text-xs text-warmgray-500 leading-relaxed">
-                Contact methods are executed through RPC configurations and server proxy alerts, alerting caregivers of scan activity while protecting contact phone numbers in transit.
+                Contact information is retrieved through secure server-side RPCs with strict database permissions. In this MVP, contacts are displayed to helpers. A future production release may add a server-side communication relay to keep contact details fully private.
               </p>
             </div>
           </div>
