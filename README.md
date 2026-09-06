@@ -44,10 +44,11 @@ CareCard bridges this gap by combining **physical simplicity with digital privac
 [ Physical QR Card ]  ──▶  [ Opaque Bearer Token ]  ──▶  [ Secure Public Profile ]
                                                                  │
                                                                  ▼
-                                                     [ Contact Information Revealed ]
+                                                  [ Contact Name & Relationship Shown ]
+                                                  [ Raw phone/email NOT sent to browser ]
 ```
 
-**Production Enhancement (Planned):** A future server-side secure relay could connect helpers to caregivers without exposing contact details to the browser.
+> **MVP Note:** This deployment does not initiate phone calls or emails. The scan page shows the trusted contact's name and relationship so a helper knows who to reach. A production communication relay (e.g. Twilio, SendGrid) would be required to place calls or send messages server-side without exposing contact values to the browser.
 
 ---
 
@@ -60,7 +61,7 @@ CareCard bridges this gap by combining **physical simplicity with digital privac
 * **One-Click Deactivation:** Lost your card? Instantly deactivate it or regenerate the QR. Old QR codes become immediately invalid.
 
 ### 🌐 Assistant Tools (Helper View)
-* **Contact Assistance (MVP Demo):** Displays verified trusted contacts securely retrieved via server-side RPCs. In this MVP, contact information is revealed to the helper; a future production release may include a server-side proxy relay to keep contact details fully private.
+* **Contact Assistance (MVP Demo):** Displays the trusted contact's name and relationship, retrieved via server-side RPCs. Raw contact values (phone numbers, emails) are **not** returned by the public RPC. This deployment does not initiate calls or emails. A future production release may include a server-side communication relay to enable helpers to reach caregivers without any contact details being exposed in the browser.
 * **Multilingual Support:** Supports English, Tamil, and Hindi.
 * **Language Assistance Cards:** Provides instant translation cards to help strangers communicate basic assistance phrases with the cardholder.
 * **Scan Auditing:** Real-time log tracking for caregivers to see when and how many times a card was scanned.

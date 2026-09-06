@@ -15,7 +15,7 @@ export function SEO({
   description,
   path,
   noindex = false,
-  image = "/og-image.png",
+  image = "/carecard.svg",
 }: SEOProps) {
   useEffect(() => {
     document.title = title;
@@ -42,7 +42,7 @@ export function SEO({
     setMetaProperty("og:image", imageUrl);
     setMetaProperty("og:image:alt", `${title} - CareCard`);
 
-    setMeta("twitter:card", "summary");
+    setMeta("twitter:card", "summary_large_image");
     setMeta("twitter:title", title);
     setMeta("twitter:description", description);
     setMeta("twitter:url", canonicalUrl);

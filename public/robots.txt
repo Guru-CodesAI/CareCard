@@ -1,5 +1,15 @@
 User-agent: *
 Disallow: /scan/
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /auth
+Disallow: /auth/
+Disallow: /create
+Disallow: /create/
+Disallow: /card/
+Disallow: /print/
+Disallow: /settings
+Disallow: /settings/
 Allow: /
 
 Sitemap: https://care-card-three.vercel.app/sitemap.xml

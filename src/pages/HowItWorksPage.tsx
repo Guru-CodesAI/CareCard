@@ -77,7 +77,7 @@ export function HowItWorksPage() {
             <div className="text-xs font-semibold text-purple-500 uppercase tracking-wider mb-1">Step 4</div>
             <h2 className="text-lg font-semibold text-warmgray-900 mb-2">View Permitted Assistance Data</h2>
             <p className="text-sm text-warmgray-600 leading-relaxed">
-              The helper is shown a mobile-optimized public page displaying only the information approved by the caregiver. Sensitive contact numbers are hidden until interaction is triggered. Caregivers receive a notification of the scan event in their dashboard.
+              The helper is shown a mobile-optimized public page displaying only the information approved by the caregiver — such as the cardholder's display name, preferred language, and accessibility needs. The caregiver's scan dashboard is updated with a timestamp of the scan event.
             </p>
           </div>
         </section>
@@ -91,7 +91,7 @@ export function HowItWorksPage() {
             <div className="text-xs font-semibold text-amber-500 uppercase tracking-wider mb-1">Step 5</div>
             <h2 className="text-lg font-semibold text-warmgray-900 mb-2">Reconnect with Trusted Contacts</h2>
             <p className="text-sm text-warmgray-600 leading-relaxed">
-              The helper can tap the contact buttons on their screen to call or email the caregiver directly from their native dialer, enabling a quick and safe reconnection without putting private numbers directly in the QR code text or public URLs.
+              The helper sees the trusted contact's name and relationship. They can use this information to reach out through their own device. This deployment shows contact details directly to the helper. A future production release may add a server-side communication relay so contact numbers remain fully private.
             </p>
           </div>
         </section>

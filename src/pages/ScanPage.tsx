@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getPublicProfile, getPublicContacts, logScan } from '@/lib/data'
+import { getPublicProfile, getPublicContacts } from '@/lib/data'
 import { getLanguageDisplay, RateLimiter } from '@/lib/utils'
 import { PublicCardProfile, SCAN_PAGE_TRANSLATIONS } from '@/types'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
@@ -80,15 +80,14 @@ export function ScanPage() {
 
       setProfile(data)
 
-      // Log the scan
-      await logScan(token)
-
       // Load contacts
       const contactsData = await getPublicContacts(token)
       setContacts(contactsData)
     } catch (err) {
       console.error(err)
-      setError('invalid')
+      setError(err instanceof Error && err.message.includes('Rate limit exceeded')
+        ? 'rate_limited'
+        : 'invalid')
     } finally {
       setLoading(false)
     }

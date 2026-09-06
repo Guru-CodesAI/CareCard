@@ -34,7 +34,7 @@ export function SecurityPage() {
             Supabase Row Level Security & PostgreSQL Security
           </h2>
           <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
-            Every database query is gated at the database layer. As a React Supabase security implementation, this Supabase RLS project leverages PostgreSQL RLS security to enforce absolute data isolation:
+            Authenticated database access is gated at the database layer. CareCard uses Supabase RLS to isolate caregiver-owned records, while public scans expose only explicitly selected fields:
           </p>
           <ul className="space-y-2 text-sm text-warmgray-600 list-disc list-inside">
             <li>Caregivers can only view, edit, or delete CareCards that belong to their authenticated user ID (<code className="bg-warmgray-100 px-1 rounded text-xs">auth.uid()</code>).</li>
@@ -53,7 +53,7 @@ export function SecurityPage() {
             Many emergency QR systems put raw personal data (like name or phone number) straight into the QR code or encode it directly in the URL query parameters. This exposes information to any scanner immediately.
           </p>
           <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
-            CareCard solves this with a robust **QR token security** model utilizing opaque, cryptographic tokens:
+            CareCard uses an opaque, high-entropy QR token model:
           </p>
           <ul className="space-y-2 text-sm text-warmgray-600 list-disc list-inside">
             <li>The QR code contains only a random UUID string (e.g. <code className="bg-warmgray-100 px-1 rounded text-xs">/scan/7a3f-b25c-...</code>).</li>
@@ -72,8 +72,8 @@ export function SecurityPage() {
             We isolate sensitive contact details using PostgreSQL security policies and Supabase RPC security functions.
           </p>
           <ul className="space-y-2 text-sm text-warmgray-600 list-disc list-inside">
-            <li>Private information (like phone numbers, specific instructions, or emails) is never loaded directly into the client-side state, achieving IDOR prevention on Supabase.</li>
-            <li>Helpers can trigger phone calls or emails through secure endpoints that only expose details to the helper's local browser dialer or email client, rather than revealing them in raw plaintext in the UI code.</li>
+            <li>Raw contact values (phone numbers, emails) are never returned by the public <code className="bg-warmgray-100 px-1 rounded text-xs">get_public_contacts</code> RPC. Only the contact name, relationship, and method type are exposed to helpers.</li>
+            <li>This deployment does not initiate phone calls or emails. The scan page shows the contact name and relationship so a helper knows who to reach. A production communication relay (e.g. Twilio, SendGrid) would be required to place calls or send messages server-side.</li>
             <li>Each piece of data (display name, languages spoken, assistance needs) is toggled individually by the caregiver, allowing them to optimize safety vs privacy.</li>
           </ul>
         </section>
@@ -82,14 +82,15 @@ export function SecurityPage() {
         <section className="card">
           <h2 className="text-lg font-semibold text-warmgray-900 mb-3 flex items-center gap-2">
             <Server className="w-5 h-5 text-brand-500" />
-            Server-Side Rate Limiting PostgreSQL & Supabase Security Project Architecture
+            Rate Limiting & Scan Logging
           </h2>
           <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
-            To prevent scraping or automated scanning of public profiles, CareCard implements server side rate limiting PostgreSQL procedures and Edge functions:
+            To reduce automated scraping of public profiles, CareCard applies client and server controls:
           </p>
           <ul className="space-y-2 text-sm text-warmgray-600 list-disc list-inside">
-            <li>Strict rate limiting on the card resolution endpoint (<code className="bg-warmgray-100 px-1 rounded text-xs">/api/scan</code>) restricts requests based on IP address and scan volume.</li>
-            <li>Database logging tracks scan event times to alert caregivers of active scans without storing helper IP addresses or identifiable tracking cookies.</li>
+            <li>A client-side <code className="bg-warmgray-100 px-1 rounded text-xs">RateLimiter</code> class limits the scan page to 10 profile requests per minute before any database call is made.</li>
+            <li>Each public profile or contact read consumes a server-side quota unit. PostgreSQL enforces a maximum of 20 public reads per minute per active card, using a transaction-level advisory lock.</li>
+            <li>Scan timestamps are logged without storing helper IP addresses or any identifiable tracking data.</li>
           </ul>
         </section>
 

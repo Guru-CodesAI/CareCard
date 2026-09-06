@@ -95,12 +95,12 @@ export function PrivacyPage() {
             Public Information Control
           </h2>
           <p className="text-sm text-warmgray-600 leading-relaxed mb-3">
-            You have full control over what information is shown when someone scans a CareCard QR code.
-            Each field can be individually toggled on or off. By default, we follow a privacy-by-default 
-            approach where only essential assistance information is shown.
+            You control which profile fields are shown when someone scans a CareCard QR code.
+            Each field can be individually toggled on or off. New trusted contacts are not publicly
+            shown until a verification flow marks them as verified.
           </p>
           <p className="text-sm text-warmgray-600 leading-relaxed">
-            Private information such as exact addresses are never displayed in the public QR scan page or encoded in the QR code itself. Verified trusted contacts are retrieved via secure server-side database RPC functions and displayed to helpers. A future production release may include a server-side communication relay to prevent direct exposure of contact details while still enabling helpers to reach caregivers.
+            Private information such as exact addresses is never displayed in the public QR scan page or encoded in the QR code itself. Only verified trusted contacts are retrieved via secure server-side database RPC functions. Contact names, relationships, and method types may be shown to helpers; raw phone numbers and emails are not returned by the public RPC. CareCard does not initiate calls or emails.
           </p>
         </section>
 
@@ -118,10 +118,6 @@ export function PrivacyPage() {
             <div className="flex justify-between py-2 border-b border-warmgray-100">
               <span>Scan logs</span>
               <span className="text-warmgray-800 font-medium">Short retention (30 days)</span>
-            </div>
-            <div className="flex justify-between py-2 border-b border-warmgray-100">
-              <span>Temporary location</span>
-              <span className="text-warmgray-800 font-medium">Deleted after session expiry</span>
             </div>
             <div className="flex justify-between py-2">
               <span>Account data</span>

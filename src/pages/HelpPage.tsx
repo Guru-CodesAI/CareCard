@@ -98,7 +98,7 @@ export function HelpPage() {
                 <li>Point the camera at the card's QR code.</li>
                 <li>Tap the link banner that appears on your screen.</li>
                 <li>Review the shared communication needs or languages.</li>
-                <li>Tap the call or message buttons to communicate with their family.</li>
+                <li>View the trusted contact's name and relationship to help reconnect the cardholder with their family.</li>
               </ol>
             </div>
           </div>
@@ -171,7 +171,7 @@ export function HelpPage() {
             {[
               {
                 q: 'Will strangers see my personal phone number?',
-                a: 'Contact information is retrieved through secure server-side database functions. Caregivers control exactly which contacts are marked as verified and visible to helpers. A future production release may add a server-side relay to prevent even helpers from directly viewing contact numbers.',
+                a: 'In this deployment, the trusted contact name and relationship are shown to helpers. Raw contact values (phone numbers, emails) are not returned by the public database function. A future production release may add a server-side communication relay so contact details are never exposed in the browser at all.',
               },
               {
                 q: 'Does CareCard track physical location?',

@@ -207,7 +207,7 @@ export function LandingPage() {
                 <div className="text-[10px] font-bold text-amber-500 uppercase tracking-wider mb-1">Step 5</div>
                 <h3 className="text-base font-semibold text-warmgray-900 mb-2">Reconnect</h3>
                 <p className="text-xs text-warmgray-500 leading-relaxed">
-                  The helper calls trusted contacts using native dialers, minimizing exposure of private data.
+                  The helper sees the trusted contact's name and relationship and can reach out to reconnect the cardholder with their family.
                 </p>
               </div>
             </div>

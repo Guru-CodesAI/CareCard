@@ -80,7 +80,7 @@ export function ForChildrenPage() {
             Secure Contact Sharing
           </h2>
           <p className="text-sm text-warmgray-600 leading-relaxed">
-            The helper view allows immediate communication via your phone's native dialer. The QR code links to a secure UUID token rather than storing your contact details directly in the code itself, preventing unwanted scans or harvesting of child/parent data.
+            The QR code links to a secure UUID token rather than storing your contact details directly in the code itself, preventing unwanted scans or harvesting of child/parent data. When a helper scans the card, they see the trusted contact's name and relationship so they can help reconnect the child with their family.
           </p>
         </section>
 

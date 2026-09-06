@@ -2,37 +2,59 @@ import { Link } from 'react-router-dom'
 import { HelpCircle, ChevronRight, AlertTriangle, ArrowLeft } from 'lucide-react'
 import { SEO } from '@/components/SEO'
 
+const faqs = [
+  {
+    q: 'What is a QR emergency contact card?',
+    a: 'CareCard is a physical QR card connected to a privacy-controlled digital assistance profile. It allows a caregiver to share limited, essential safety information with helpers who scan the card.'
+  },
+  {
+    q: 'How does a QR emergency contact card work?',
+    a: 'A caregiver creates a CareCard, prints its QR code, and the card holder carries it. A helper can scan the QR code to view permitted assistance information.'
+  },
+  {
+    q: 'Is CareCard designed for elderly people?',
+    a: 'Yes. CareCard is designed for elderly people, children, travelers, and individuals who may have difficulty communicating during situations where assistance is needed.'
+  },
+  {
+    q: 'Does the QR code contain my phone number?',
+    a: 'No. CareCard uses an opaque cryptographically generated token instead of storing personal information directly in the QR code or URL.'
+  },
+  {
+    q: 'Does the helper need the CareCard app?',
+    a: 'No. The helper can access the public assistance view through any standard web browser on their smartphone.'
+  },
+  {
+    q: 'Can I deactivate my CareCard?',
+    a: 'Yes. A caregiver can deactivate the card and regenerate its QR token directly from their dashboard. The old physical QR code will immediately become invalid.'
+  },
+  {
+    q: 'Is CareCard an emergency service?',
+    a: 'No. CareCard is a communication and assistance aid and does not replace emergency services. In a medical or safety emergency, always call local emergency response first.'
+  }
+]
+
+function FAQSchema() {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.a,
+      },
+    })),
+  }
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}
+
 export function FAQPage() {
-  const faqs = [
-    {
-      q: 'What is a QR emergency contact card?',
-      a: 'CareCard is a physical QR card connected to a privacy-controlled digital assistance profile. It allows a caregiver to share limited, essential safety information with helpers who scan the card.'
-    },
-    {
-      q: 'How does a QR emergency contact card work?',
-      a: 'A caregiver creates a CareCard, prints its QR code, and the card holder carries it. A helper can scan the QR code to view permitted assistance information.'
-    },
-    {
-      q: 'Is CareCard designed for elderly people?',
-      a: 'Yes. CareCard is designed for elderly people, children, travelers, and individuals who may have difficulty communicating during situations where assistance is needed.'
-    },
-    {
-      q: 'Does the QR code contain my phone number?',
-      a: 'No. CareCard uses an opaque cryptographically generated token instead of storing personal information directly in the QR code or URL.'
-    },
-    {
-      q: 'Does the helper need the CareCard app?',
-      a: 'No. The helper can access the public assistance view through any standard web browser on their smartphone.'
-    },
-    {
-      q: 'Can I deactivate my CareCard?',
-      a: 'Yes. A caregiver can deactivate the card and regenerate its QR token directly from their dashboard. The old physical QR code will immediately become invalid.'
-    },
-    {
-      q: 'Is CareCard an emergency service?',
-      a: 'No. CareCard is a communication and assistance aid and does not replace emergency services. In a medical or safety emergency, always call local emergency response first.'
-    }
-  ]
 
   return (
     <div className="page-container page-enter">
@@ -41,6 +63,7 @@ export function FAQPage() {
         description="Find answers to emergency QR code questions and learn how QR emergency cards work to protect seniors, children, and vulnerable groups."
         path="/faq"
       />
+      <FAQSchema />
       <Link to="/" className="btn-ghost mb-4 -ml-2">
         <ArrowLeft className="w-4 h-4" />
         Back

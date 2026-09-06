@@ -200,10 +200,11 @@ CREATE POLICY "Caregivers can read own card scan logs"
 CREATE OR REPLACE FUNCTION update_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
-  NEW.updated_at = NOW();
+  NEW.updated_at = pg_catalog.now();
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql
+SET search_path = pg_catalog, public;
 
 CREATE TRIGGER care_cards_updated_at
   BEFORE UPDATE ON care_cards
@@ -213,6 +214,48 @@ CREATE TRIGGER care_cards_updated_at
 -- ============================================
 -- 6. Secure Server-Side RPC Functions
 -- ============================================
+
+-- Shared public-scan quota. Every public data read consumes one quota unit,
+-- so callers cannot bypass throttling by skipping the browser scan flow.
+CREATE OR REPLACE FUNCTION public.enforce_public_scan_rate(p_token text)
+RETURNS uuid
+SECURITY DEFINER
+SET search_path = public, pg_temp
+LANGUAGE plpgsql AS $$
+DECLARE
+  v_card_id UUID;
+  v_recent_count INTEGER;
+BEGIN
+  IF p_token IS NULL OR p_token !~ '^[0-9a-fA-F]{64}$' THEN
+    RETURN NULL;
+  END IF;
+
+  SELECT id INTO v_card_id
+  FROM public.care_cards
+  WHERE public_token = p_token AND status = 'active'
+  LIMIT 1;
+
+  IF v_card_id IS NULL THEN
+    RETURN NULL;
+  END IF;
+
+  PERFORM pg_advisory_xact_lock(hashtext(v_card_id::text));
+
+  SELECT COUNT(*) INTO v_recent_count
+  FROM public.scan_logs
+  WHERE card_id = v_card_id
+    AND scanned_at > NOW() - INTERVAL '1 minute';
+
+  IF v_recent_count >= 20 THEN
+    RAISE EXCEPTION 'Rate limit exceeded' USING ERRCODE = 'P0001';
+  END IF;
+
+  INSERT INTO public.scan_logs (card_id) VALUES (v_card_id);
+  RETURN v_card_id;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.enforce_public_scan_rate(text) FROM public, anon, authenticated;
 
 -- A. Secure Public Profile Retrieval
 -- Server-side projection: only outputs enabled fields and never exposes caregiver_id or tokens.
@@ -229,6 +272,10 @@ SECURITY DEFINER
 SET search_path = public, pg_temp
 LANGUAGE plpgsql AS $$
 BEGIN
+  IF public.enforce_public_scan_rate(p_token) IS NULL THEN
+    RETURN;
+  END IF;
+
   RETURN QUERY
   SELECT 
     CASE WHEN show_display_name THEN cc.display_name ELSE NULL END,
@@ -257,6 +304,10 @@ SECURITY DEFINER
 SET search_path = public, pg_temp
 LANGUAGE plpgsql AS $$
 BEGIN
+  IF public.enforce_public_scan_rate(p_token) IS NULL THEN
+    RETURN;
+  END IF;
+
   RETURN QUERY
   SELECT 
     tc.contact_name,
@@ -285,28 +336,7 @@ DECLARE
   v_card_id UUID;
   v_recent_count INTEGER;
 BEGIN
-  SELECT id INTO v_card_id 
-  FROM care_cards 
-  WHERE public_token = p_token AND status = 'active'
-  LIMIT 1;
-  
-  IF v_card_id IS NULL THEN
-    RETURN;
-  END IF;
-
-  -- Obtain a transaction-level exclusive advisory lock on the card ID hash to prevent concurrent logging race conditions
-  PERFORM pg_advisory_xact_lock(hashtext(v_card_id::text));
-
-  -- Server-side rate limit: max 20 scans per minute per card to prevent log flooding
-  SELECT COUNT(*) INTO v_recent_count
-  FROM scan_logs
-  WHERE card_id = v_card_id AND scanned_at > NOW() - INTERVAL '1 minute';
-
-  IF v_recent_count >= 20 THEN
-    RAISE EXCEPTION 'Rate limit exceeded' USING ERRCODE = 'P0001';
-  END IF;
-
-  INSERT INTO scan_logs (card_id) VALUES (v_card_id);
+  PERFORM public.enforce_public_scan_rate(p_token);
 END;
 $$;
 

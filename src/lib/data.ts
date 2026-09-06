@@ -201,7 +201,7 @@ export async function createContact(
       ...sanitized,
       card_id: cardId,
       caregiver_id: caregiverId,
-      is_verified: true,
+      is_verified: false,
       contact_enabled: true,
     })
     .select()
@@ -216,9 +216,25 @@ export async function updateContact(
   data: Partial<TrustedContact>,
   caregiverId: string
 ): Promise<TrustedContact | null> {
+  // Strip security-sensitive fields to prevent parameter pollution
+  // is_verified and caregiver_id are also blocked by DB trigger, but strip here too
+  const {
+    id: _id,
+    card_id: _card_id,
+    caregiver_id: _caregiver_id,
+    is_verified: _is_verified,
+    created_at: _created_at,
+    ...allowedUpdates
+  } = data
+
+  const sanitized: Partial<TrustedContact> = { ...allowedUpdates }
+  if (sanitized.contact_name) sanitized.contact_name = sanitizeInput(sanitized.contact_name, 100)
+  if (sanitized.relationship) sanitized.relationship = sanitizeInput(sanitized.relationship, 50)
+  if (sanitized.contact_value) sanitized.contact_value = sanitizeInput(sanitized.contact_value, 50)
+
   const { data: updated, error } = await supabase
     .from('trusted_contacts')
-    .update(data)
+    .update(sanitized)
     .eq('id', id)
     .eq('caregiver_id', caregiverId)
     .select()
@@ -243,7 +259,7 @@ export async function getPublicContacts(token: string): Promise<{ contact_name: 
   const { data, error } = await supabase
     .rpc('get_public_contacts', { p_token: token })
 
-  if (error) return []
+  if (error) throw new Error(error.message)
   return data || []
 }
 
@@ -253,7 +269,8 @@ export async function getPublicContacts(token: string): Promise<{ contact_name: 
 
 export async function logScan(token: string): Promise<void> {
   // Use the secure RPC scan logger
-  await supabase.rpc('log_card_scan', { p_token: token })
+  const { error } = await supabase.rpc('log_card_scan', { p_token: token })
+  if (error) throw new Error(error.message)
 }
 
 export async function getScanLogs(cardId: string): Promise<ScanLog[]> {

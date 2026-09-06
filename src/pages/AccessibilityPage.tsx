@@ -67,7 +67,7 @@ export function AccessibilityPage() {
               <div>
                 <h3 className="font-semibold text-warmgray-800 text-sm">Large Tap Targets & Keyboard Navigation</h3>
                 <p className="text-xs text-warmgray-500 mt-1">
-                  Interactive buttons (like calling the caregiver) have large tap targets (exceeding 48px) and explicit focus states, ensuring they are easy to use for helpers with motor control difficulties or on shaky mobile screens.
+                  Interactive buttons (like the Contact Trusted Person button) have large tap targets (exceeding 48px) and explicit focus states, ensuring they are easy to use for helpers with motor control difficulties or on shaky mobile screens.
                 </p>
               </div>
             </div>
