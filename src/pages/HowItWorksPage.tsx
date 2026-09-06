@@ -91,7 +91,7 @@ export function HowItWorksPage() {
             <div className="text-xs font-semibold text-amber-500 uppercase tracking-wider mb-1">Step 5</div>
             <h2 className="text-lg font-semibold text-warmgray-900 mb-2">Reconnect with Trusted Contacts</h2>
             <p className="text-sm text-warmgray-600 leading-relaxed">
-              The helper sees the trusted contact's name and relationship. They can use this information to reach out through their own device. This deployment shows contact details directly to the helper. A future production release may add a server-side communication relay so contact numbers remain fully private.
+              The helper sees the trusted contact's name and relationship. They can use this information to reach out through their own device. This deployment does not initiate phone calls or emails.
             </p>
           </div>
         </section>

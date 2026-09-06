@@ -350,7 +350,7 @@ export function LandingPage() {
               <Server className="w-8 h-8 text-brand-500 mb-4" />
               <h3 className="text-base font-semibold text-warmgray-900 mb-2">Server-Side RPC Security</h3>
               <p className="text-xs text-warmgray-500 leading-relaxed">
-                Contact information is retrieved through secure server-side RPCs with strict database permissions. In this MVP, contacts are displayed to helpers. A future production release may add a server-side communication relay to keep contact details fully private.
+                Contact information is retrieved through secure server-side RPCs with strict database permissions. In this MVP, verified contact names and relationships are displayed to helpers. This deployment does not initiate phone calls or emails.
               </p>
             </div>
           </div>

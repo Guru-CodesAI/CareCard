@@ -156,7 +156,7 @@ export function HelpPage() {
                 <EyeOff className="w-3.5 h-3.5 text-brand-500" /> Server-Side Security
               </h3>
               <p className="text-xs text-warmgray-500 leading-relaxed">
-                Contact information is retrieved through secure server-side RPC functions with strict database permissions. In this MVP, contact details are displayed to helpers; a production release may add a server-side relay to keep numbers fully private.
+                Contact information is retrieved through secure server-side RPC functions with strict database permissions. In this MVP, verified contact names and relationships are displayed to helpers. This deployment does not initiate phone calls or emails.
               </p>
             </div>
           </div>
@@ -171,7 +171,7 @@ export function HelpPage() {
             {[
               {
                 q: 'Will strangers see my personal phone number?',
-                a: 'In this deployment, the trusted contact name and relationship are shown to helpers. Raw contact values (phone numbers, emails) are not returned by the public database function. A future production release may add a server-side communication relay so contact details are never exposed in the browser at all.',
+                a: 'In this deployment, the trusted contact name and relationship are shown to helpers. Raw contact values (phone numbers, emails) are not returned by the public database function. This deployment does not initiate phone calls or emails.',
               },
               {
                 q: 'Does CareCard track physical location?',
