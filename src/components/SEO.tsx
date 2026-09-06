@@ -20,7 +20,10 @@ export function SEO({
   useEffect(() => {
     document.title = title;
 
-    const canonicalUrl = `${SITE_URL}${path}`;
+    const canonicalUrl = new URL(path, SITE_URL).toString();
+    const imageUrl = image.startsWith("http")
+      ? image
+      : new URL(image, SITE_URL).toString();
 
     setMeta("description", description);
     setMeta(
@@ -30,14 +33,21 @@ export function SEO({
         : "index, follow, max-image-preview:large"
     );
 
+    setMetaProperty("og:type", "website");
+    setMetaProperty("og:site_name", "CareCard");
+    setMetaProperty("og:locale", "en_US");
     setMetaProperty("og:title", title);
     setMetaProperty("og:description", description);
     setMetaProperty("og:url", canonicalUrl);
-    setMetaProperty("og:image", image.startsWith("http") ? image : `${SITE_URL}${image}`);
+    setMetaProperty("og:image", imageUrl);
+    setMetaProperty("og:image:alt", `${title} - CareCard`);
 
+    setMeta("twitter:card", "summary");
     setMeta("twitter:title", title);
     setMeta("twitter:description", description);
-    setMeta("twitter:image", image.startsWith("http") ? image : `${SITE_URL}${image}`);
+    setMeta("twitter:url", canonicalUrl);
+    setMeta("twitter:image", imageUrl);
+    setMeta("twitter:image:alt", `${title} - CareCard`);
 
     let canonical = document.querySelector(
       'link[rel="canonical"]'
@@ -51,8 +61,35 @@ export function SEO({
 
     canonical.href = canonicalUrl;
 
+    const schemaId = "carecard-page-schema";
+    let schema = document.getElementById(schemaId) as HTMLScriptElement | null;
+
+    if (!noindex) {
+      if (!schema) {
+        schema = document.createElement("script");
+        schema.id = schemaId;
+        schema.type = "application/ld+json";
+        document.head.appendChild(schema);
+      }
+
+      schema.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: title,
+        description,
+        url: canonicalUrl,
+        isPartOf: {
+          "@type": "WebSite",
+          name: "CareCard",
+          url: SITE_URL,
+        },
+      });
+    } else {
+      schema?.remove();
+    }
+
     return () => {
-      // Keep metadata stable or reset as needed
+      schema?.remove();
     };
   }, [title, description, path, noindex, image]);
 

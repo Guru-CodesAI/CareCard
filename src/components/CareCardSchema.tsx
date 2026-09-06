@@ -7,7 +7,13 @@ export function CareCardSchema() {
     "description": "Privacy-first QR emergency contact card and digital assistance system.",
     "applicationCategory": "SafetyApplication",
     "operatingSystem": "Web",
-    "isAccessibleForFree": true
+    "isAccessibleForFree": true,
+    "image": "https://care-card-three.vercel.app/carecard.svg",
+    "publisher": {
+      "@type": "Organization",
+      "name": "CareCard",
+      "url": "https://care-card-three.vercel.app/"
+    }
   };
 
   return (
