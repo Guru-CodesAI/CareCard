@@ -48,7 +48,7 @@ CareCard bridges this gap by combining **physical simplicity with digital privac
                                                   [ Raw phone/email NOT sent to browser ]
 ```
 
-> **MVP Note:** This deployment does not initiate phone calls or emails. The scan page shows the trusted contact's name and relationship so a helper knows who to reach. A production communication relay (e.g. Twilio, SendGrid) would be required to place calls or send messages server-side without exposing contact values to the browser.
+> **MVP Note:** This deployment does not initiate phone calls or emails. The scan page shows the trusted contact's name and relationship so a helper knows who to reach.
 
 ---
 
@@ -61,7 +61,7 @@ CareCard bridges this gap by combining **physical simplicity with digital privac
 * **One-Click Deactivation:** Lost your card? Instantly deactivate it or regenerate the QR. Old QR codes become immediately invalid.
 
 ### 🌐 Assistant Tools (Helper View)
-* **Contact Assistance (MVP Demo):** Displays the trusted contact's name and relationship, retrieved via server-side RPCs. Raw contact values (phone numbers, emails) are **not** returned by the public RPC. This deployment does not initiate calls or emails. A future production release may include a server-side communication relay to enable helpers to reach caregivers without any contact details being exposed in the browser.
+* **Contact Assistance (MVP Demo):** Displays the trusted contact's name and relationship, retrieved via server-side RPCs. Raw contact values (phone numbers, emails) are **not** returned by the public RPC. This deployment does not initiate phone calls or emails.
 * **Multilingual Support:** Supports English, Tamil, and Hindi.
 * **Language Assistance Cards:** Provides instant translation cards to help strangers communicate basic assistance phrases with the cardholder.
 * **Scan Auditing:** Real-time log tracking for caregivers to see when and how many times a card was scanned.
@@ -70,7 +70,7 @@ CareCard bridges this gap by combining **physical simplicity with digital privac
 
 ## 🏗️ Technical SEO & Architecture
 
-CareCard features a production-ready SEO architecture designed to crawl public marketing assets while protecting private user profiles.
+CareCard features an SEO architecture designed to crawl public marketing assets while protecting private user profiles.
 
 ### 🚀 Search Discovery & Page Optimization
 * **JSON-LD Structured Data:** Embeds microdata schemas for both `WebApplication` (defining product utility) and `FAQPage` (matching direct user queries).
@@ -102,7 +102,7 @@ CareCard features a production-ready SEO architecture designed to crawl public m
 
 ## 🛡️ Security Hardening (PostgreSQL + RLS)
 
-We have taken CareCard through extensive defensive auditing and implemented a strict, production-ready security architecture:
+We have taken CareCard through defensive auditing and implemented a security-hardened MVP architecture:
 
 ### 1. Row Level Security (RLS) Boundaries
 * Direct public reads on `care_cards`, `trusted_contacts`, and `scan_logs` are **strictly blocked**.

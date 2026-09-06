@@ -9,11 +9,6 @@ export function CareCardSchema() {
     "operatingSystem": "Web",
     "isAccessibleForFree": true,
     "image": "https://care-card-three.vercel.app/carecard.svg",
-    "publisher": {
-      "@type": "Organization",
-      "name": "CareCard",
-      "url": "https://care-card-three.vercel.app/"
-    }
   };
 
   return (

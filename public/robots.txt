@@ -1,5 +1,4 @@
 User-agent: *
-Disallow: /scan/
 Disallow: /dashboard
 Disallow: /dashboard/
 Disallow: /auth

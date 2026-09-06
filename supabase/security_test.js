@@ -173,7 +173,7 @@ async function runSecurityTests() {
 
   console.log('\n--- Summary ---')
   if (passed) {
-    console.log('🟢 All RLS and public access boundaries are secure!')
+    console.log('🟢 Configured security boundary tests completed successfully.')
     process.exit(0)
   } else {
     console.error('🔴 Warning: One or more security checks failed. Please verify your Supabase RLS policies.')

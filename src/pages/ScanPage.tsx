@@ -316,10 +316,7 @@ export function ScanPage() {
                     <div className="p-4 rounded-xl bg-blue-50 border border-blue-200">
                       <p className="text-xs text-blue-800 leading-relaxed mb-3">
                         <Info className="w-4 h-4 inline mr-2" />
-                        <strong>Demo Mode:</strong> This deployment does not initiate phone calls or emails. 
-                      </p>
-                      <p className="text-xs text-blue-700">
-                        A production deployment with a real server-side communication relay (e.g., Twilio, SendGrid) would securely contact the caregiver while keeping their number private.
+                        This deployment does not initiate phone calls or emails.
                       </p>
                     </div>
 

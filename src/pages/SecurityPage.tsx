@@ -56,7 +56,7 @@ export function SecurityPage() {
             CareCard uses an opaque, high-entropy QR token model:
           </p>
           <ul className="space-y-2 text-sm text-warmgray-600 list-disc list-inside">
-            <li>The QR code contains only a random UUID string (e.g. <code className="bg-warmgray-100 px-1 rounded text-xs">/scan/7a3f-b25c-...</code>).</li>
+            <li>The QR code contains only a 64-character cryptographically random hexadecimal token (e.g. <code className="bg-warmgray-100 px-1 rounded text-xs">/scan/7a3fb25c...</code>).</li>
             <li>When scanned, our database queries the card matching that token and resolves only the fields marked public by the caregiver.</li>
             <li>If a card is lost or stolen, the caregiver can deactivate the token with a single click. This instantly invalidates the old physical QR code without deleting the card or requiring account recreation.</li>
           </ul>
@@ -73,7 +73,7 @@ export function SecurityPage() {
           </p>
           <ul className="space-y-2 text-sm text-warmgray-600 list-disc list-inside">
             <li>Raw contact values (phone numbers, emails) are never returned by the public <code className="bg-warmgray-100 px-1 rounded text-xs">get_public_contacts</code> RPC. Only the contact name, relationship, and method type are exposed to helpers.</li>
-            <li>This deployment does not initiate phone calls or emails. The scan page shows the contact name and relationship so a helper knows who to reach. A production communication relay (e.g. Twilio, SendGrid) would be required to place calls or send messages server-side.</li>
+            <li>This deployment does not initiate phone calls or emails. The scan page shows the contact name and relationship so a helper knows who to reach.</li>
             <li>Each piece of data (display name, languages spoken, assistance needs) is toggled individually by the caregiver, allowing them to optimize safety vs privacy.</li>
           </ul>
         </section>
