@@ -121,19 +121,19 @@ async function runSecurityTests() {
     console.log('✅ Test 6 Passed: Anonymous execution of "delete_user_account" threw exception (blocked).')
   }
 
-  // Test 7: Verify that public.get_public_contacts does not expose 'contact_value'
+  // Test 7: Verify that the consolidated public scan RPC does not expose PII
   try {
-    const { data, error } = await supabase.rpc('get_public_contacts', { p_token: 'dummy-token' })
+    const { data, error } = await supabase.rpc('get_public_card', { p_token: 'dummy-token' })
     if (error) {
-      console.error(`❌ Test 7 FAILED to execute get_public_contacts: ${error.message}`);
+      console.error(`❌ Test 7 FAILED to execute get_public_card: ${error.message}`);
       passed = false;
     } else {
-      console.log('✅ Test 7 Passed: public.get_public_contacts() executes successfully.');
-      if (data && data.length > 0 && ('contact_value' in data[0] || 'caregiver_id' in data[0])) {
-        console.error('❌ Test 7 FAILED: get_public_contacts exposes PII or caregiver metadata!');
+      console.log('✅ Test 7 Passed: public.get_public_card() executes successfully.');
+      if (data && data.length > 0 && ('contact_value' in data[0] || 'caregiver_id' in data[0] || 'public_token' in data[0])) {
+        console.error('❌ Test 7 FAILED: get_public_card exposes PII or security metadata!');
         passed = false;
       } else {
-        console.log('✅ Test 7 Passed: PII (contact_value) and metadata (caregiver_id) are NOT exposed in get_public_contacts results.');
+        console.log('✅ Test 7 Passed: public card projection excludes raw contact values and security metadata.');
       }
     }
   } catch (err) {
@@ -141,14 +141,14 @@ async function runSecurityTests() {
     passed = false;
   }
 
-  // Test 8: Verify that public.log_card_scan is executable anonymously
+  // Test 8: Verify that the consolidated scan RPC is executable anonymously
   try {
-    const { error } = await supabase.rpc('log_card_scan', { p_token: 'dummy-token' })
+    const { error } = await supabase.rpc('get_public_card', { p_token: 'dummy-token' })
     if (error) {
-      console.error(`❌ Test 8 FAILED: log_card_scan execution failed: ${error.message}`);
+      console.error(`❌ Test 8 FAILED: get_public_card execution failed: ${error.message}`);
       passed = false;
     } else {
-      console.log('✅ Test 8 Passed: log_card_scan is executable anonymously.');
+      console.log('✅ Test 8 Passed: get_public_card is executable anonymously.');
     }
   } catch (err) {
     console.error('❌ Test 8 FAILED calling log_card_scan:', err);

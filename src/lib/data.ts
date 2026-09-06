@@ -141,22 +141,36 @@ export async function regenerateQR(id: string, caregiverId: string): Promise<str
 // Public scan — returns only safe fields
 // ========================================
 
-export async function getPublicProfile(token: string): Promise<PublicCardProfile | null> {
-  // Use the secure RPC function to get the profile without exposing other table rows or show_* flags
-  const { data, error } = await supabase
-    .rpc('get_public_profile', { p_token: token })
+export interface PublicScanResult {
+  profile: PublicCardProfile
+  contacts: {
+    contact_name: string
+    relationship: string
+    contact_method: 'phone' | 'email'
+    is_primary: boolean
+  }[]
+}
 
-  if (error || !data || data.length === 0) return null
+export async function getPublicCard(token: string): Promise<PublicScanResult | null> {
+  // One RPC validates, rate-limits, logs, and returns only public fields.
+  const { data, error } = await supabase
+    .rpc('get_public_card', { p_token: token })
+
+  if (error) throw new Error(error.message)
+  if (!data || data.length === 0) return null
 
   const record = data[0]
   return {
-    display_name: record.display_name,
-    preferred_language: record.preferred_language,
-    accessibility_info: record.accessibility_info,
-    approximate_area: record.approximate_area,
-    custom_instructions: record.custom_instructions,
-    status: record.status,
-    card_id_short: token.substring(0, 8).toUpperCase(),
+    profile: {
+      display_name: record.display_name,
+      preferred_language: record.preferred_language,
+      accessibility_info: record.accessibility_info,
+      approximate_area: record.approximate_area,
+      custom_instructions: record.custom_instructions,
+      status: record.status,
+      card_id_short: token.substring(0, 8).toUpperCase(),
+    },
+    contacts: record.contacts || [],
   }
 }
 
@@ -252,25 +266,6 @@ export async function deleteContact(id: string, caregiverId: string): Promise<bo
     .eq('caregiver_id', caregiverId)
 
   return !error
-}
-
-export async function getPublicContacts(token: string): Promise<{ contact_name: string; relationship: string; contact_method: 'phone' | 'email'; is_primary: boolean }[]> {
-  // Use the secure RPC function to fetch contacts without exposing raw tables to public SELECTs
-  const { data, error } = await supabase
-    .rpc('get_public_contacts', { p_token: token })
-
-  if (error) throw new Error(error.message)
-  return data || []
-}
-
-// ========================================
-// Scan Logs
-// ========================================
-
-export async function logScan(token: string): Promise<void> {
-  // Use the secure RPC scan logger
-  const { error } = await supabase.rpc('log_card_scan', { p_token: token })
-  if (error) throw new Error(error.message)
 }
 
 export async function getScanLogs(cardId: string): Promise<ScanLog[]> {

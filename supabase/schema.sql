@@ -257,7 +257,63 @@ $$;
 
 REVOKE ALL ON FUNCTION public.enforce_public_scan_rate(text) FROM public, anon, authenticated;
 
--- A. Secure Public Profile Retrieval
+-- A. Secure Public Card Retrieval
+-- One public request performs validation, rate limiting, logging, and projection.
+DROP FUNCTION IF EXISTS public.get_public_card(text);
+CREATE OR REPLACE FUNCTION public.get_public_card(p_token text)
+RETURNS TABLE (
+  display_name text,
+  preferred_language text,
+  accessibility_info text,
+  approximate_area text,
+  custom_instructions text,
+  status text,
+  contacts jsonb
+)
+SECURITY DEFINER
+SET search_path = public, pg_temp
+LANGUAGE plpgsql AS $$
+DECLARE
+  v_card_id uuid;
+BEGIN
+  v_card_id := public.enforce_public_scan_rate(p_token);
+  IF v_card_id IS NULL THEN
+    RETURN;
+  END IF;
+
+  RETURN QUERY
+  SELECT
+    CASE WHEN cc.show_display_name THEN cc.display_name END,
+    CASE WHEN cc.show_language THEN cc.preferred_language END,
+    CASE WHEN cc.show_accessibility THEN cc.accessibility_info END,
+    CASE WHEN cc.show_area THEN cc.approximate_area END,
+    CASE WHEN cc.show_instructions THEN cc.custom_instructions END,
+    cc.status,
+    CASE WHEN cc.show_trusted_contact THEN COALESCE((
+      SELECT jsonb_agg(jsonb_build_object(
+        'contact_name', tc.contact_name,
+        'relationship', tc.relationship,
+        'contact_method', tc.contact_method,
+        'is_primary', tc.is_primary
+      ) ORDER BY tc.is_primary DESC)
+      FROM public.trusted_contacts tc
+      WHERE tc.card_id = cc.id
+        AND tc.is_verified = TRUE
+        AND tc.contact_enabled = TRUE
+    ), '[]'::jsonb) ELSE '[]'::jsonb END
+  FROM public.care_cards cc
+  WHERE cc.id = v_card_id
+    AND cc.status = 'active'
+  LIMIT 1;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.get_public_card(text) FROM public, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.get_public_card(text) TO anon, authenticated;
+
+-- Legacy public profile/contact functions remain defined only for safe migration
+-- compatibility and are revoked below; the client uses get_public_card exclusively.
+-- B. Secure Public Profile Retrieval
 -- Server-side projection: only outputs enabled fields and never exposes caregiver_id or tokens.
 CREATE OR REPLACE FUNCTION public.get_public_profile(p_token text)
 RETURNS TABLE (
@@ -389,9 +445,10 @@ REVOKE ALL ON FUNCTION public.delete_user_account() FROM public, anon, authentic
 REVOKE ALL ON FUNCTION public.purge_old_scan_logs() FROM public, anon, authenticated;
 
 -- Grant execution explicitly to specific roles
-GRANT EXECUTE ON FUNCTION public.get_public_profile(text) TO anon, authenticated;
-GRANT EXECUTE ON FUNCTION public.get_public_contacts(text) TO anon, authenticated;
-GRANT EXECUTE ON FUNCTION public.log_card_scan(text) TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.delete_user_account() TO authenticated;
+
+DROP FUNCTION IF EXISTS public.get_public_profile(text);
+DROP FUNCTION IF EXISTS public.get_public_contacts(text);
+DROP FUNCTION IF EXISTS public.log_card_scan(text);
 
 

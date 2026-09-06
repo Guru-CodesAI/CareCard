@@ -15,7 +15,7 @@ export function SEO({
   description,
   path,
   noindex = false,
-  image = "/carecard.svg",
+  image = "/og-image.png",
 }: SEOProps) {
   useEffect(() => {
     document.title = title;

@@ -8,7 +8,7 @@ export function CareCardSchema() {
     "applicationCategory": "SafetyApplication",
     "operatingSystem": "Web",
     "isAccessibleForFree": true,
-    "image": "https://care-card-three.vercel.app/carecard.svg",
+    "image": "https://care-card-three.vercel.app/og-image.png",
   };
 
   return (
